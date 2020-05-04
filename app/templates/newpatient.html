@@ -1,0 +1,35 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+ <div class="container">
+    <div>
+    <legend class="border-bottom mb-4">New Patient </legend>
+    </div>
+    <form action="{{url_for('patient')}}" method="POST">
+         
+       {{ form.hidden_tag() }}
+       {% for field in form if field.widget.input_type != 'hidden' %}
+       <p>
+       {{field.label (class="form-control-lable")}}
+       {{field (class="form-control form-control-md")}}
+       
+       <span>
+       {% if field.errors %}
+        {% for error in field.errors %}
+         {{ error }}
+       {% endfor %}
+       {% endif %}
+       </span>
+
+       </p>
+       {% endfor %}
+  <div>
+       <button class="btn btn-primary">Enter Patient</button>
+  </div>
+    </form>
+    </div>
+    </div>
+   
+{% endblock %}

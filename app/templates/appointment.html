@@ -1,0 +1,36 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h5>Appointment list</h5>
+    
+    <table style="border: 1px;" class="table table-strip table-bordered table-hover table-condensed table-responsive" height="70%">
+     <thead style="align-items: center;">
+         <tr>
+                 <th>Appointment date</th>
+                 <th>Appointment time</th>
+                 <th>Contact</th>
+                 <th>Message</th>
+                 <th>Action</th>
+         </tr>
+     </thead>
+     {% for appointment in appointments %}
+     <tr>
+         <td>{{appointment.appointmentdate}}</td>
+         <td>{{appointment.appointmenttime}}</td>
+         <td>{{appointment.contact}}</td>
+         <td>{{appointment.message}}</td>
+
+         <td>
+             <a class="btn btn-success btn-sm" href="/appointment/editappointment/{{appointment.appointmentid}}">Update</a>
+             <a class="btn btn-danger btn-sm" href="/appointment/deleteappointment/{{appointment.appointmentid}}">Drop</a>
+         </td>
+     </tr>
+
+     {% endfor %}
+     
+    </table>
+    </div>
+    
+{% endblock %}

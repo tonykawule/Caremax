@@ -1,0 +1,35 @@
+
+{% extends 'base.html'%}
+
+{% block content %}
+<div class="container">
+    <h3>Treatment list</h3>
+    
+    <table style="border: 1px;" class="table table-strip table-bordered table-hover table-condensed table-responsive" >
+     <thead style="align-items: center;">
+         <tr>
+                 <th>Diagnosis</th>
+                 <th>Treatment name</th>
+                 <th>Dosage</th>
+                 <th>Action</th>
+                 
+             
+         </tr>
+     </thead>
+     {% for treatment in treatments %}
+     <tr>
+         <td>{{treatment.diagnosis}}</td>
+         <td>{{treatment.treatment}}</td>
+         <td>{{treatment.dosage}}</td>
+         <td>
+             <a class="btn btn-success btn-sm" href="/treatment/edittreatment/{{treatment.treatmentid}}">Update</a>
+             <a class="btn btn-danger btn-sm" href="/treatment/deletetreatment/{{treatment.treatmentid}}">Drop</a>
+         </td>
+     </tr>
+
+     {% endfor %}
+     
+    </table>
+    </div>
+{% endblock %}
+

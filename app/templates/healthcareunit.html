@@ -1,0 +1,62 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+
+    
+<script>
+   function FilterRow(data) {
+    console.log("searching for "+data); 
+    var filter = data;
+    var table = document.getElementById("patienttable");
+    for (i = 1; i<table.rows.length; i++)
+    {
+        var rowdata = table.rows[i].innerHTML;
+        console.log(rowdata.toUpperCase());
+         if(rowdata.toUpperCase().search(data.toUpperCase())>-1) {table.rows[i].style.display="";} 
+        else {table.rows[i].style.display="none";} 
+    }
+    
+}
+</script> 
+<div class="container">
+ <br>
+<table  width="30%" allign="center" float="right">
+    <tr>
+     <td><input class="form-control" style="min-width:40%" type="text" onkeydown="FilterRow(this.value)" placeholder="Search for a health care unit"/></td>
+     </tr>
+    </table>
+
+    <h4>Patient list </h4><a class="btn btn-success btn-sm float-left " href="{{url_for('newhealthcareunit')}}">New Health care unit</a>
+    <br>
+    <br>
+    
+    <table id="patienttable" class="table table-strip table-bordered table-hover table-condensed table-responsive">
+     <thead style="align-items: center;">
+         <tr>
+                 <th>Health care unit name</th>
+                 <th>Address</th>
+                 <th>Action</th>
+                 
+                     
+         </tr>
+     </thead>
+     {% for healthcareunit in healthcareunits %}
+     <tr>
+         <td>{{healthcareunit.healthcareunit}}</td>
+         <td>{{healthcareunit.address}}</td>
+        
+         <td>
+         <a class="btn btn-success btn-xs" href="/patient/editpatient/{{patient.id}}">update</a>
+         <a class="btn btn-danger btn-xs" href="/patient/deletepatient/{{patient.id}}">drop</a>
+        <a class="btn btn-info btn-xs" href="{{url_for('profile')}}">profile</a>
+         </td>
+     </tr>
+
+     {% endfor %}
+     
+    </table>
+     </div>
+    </div>
+   </div> 
+{% endblock %}
