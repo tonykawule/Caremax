@@ -1,0 +1,99 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+  
+<script>
+   function FilterRow(data) {
+    console.log("searching for "+data); 
+    var filter = data;
+    var table = document.getElementById("patienttable");
+    for (i = 1; i<table.rows.length; i++)
+    {
+        var rowdata = table.rows[i].innerHTML;
+        console.log(rowdata.toUpperCase());
+         if(rowdata.toUpperCase().search(data.toUpperCase())>-1) {table.rows[i].style.display="";} 
+        else {table.rows[i].style.display="none";} 
+    }
+    
+}
+</script> 
+<div class="content-wrapper">
+    <div class="jumbotron" style="background-color: white">
+
+         <!--Flash Messages-->
+         {% with messages = get_flashed_messages(with_categories=true) %}
+         {% if messages %}
+         {% for category, message in messages %}
+         <div class="alert alert-{{category}}">
+         {{message}}
+         </div>
+         {% endfor %}
+         {% endif %}
+         {% endwith %}
+         <!--End flash message-->
+ <br>
+<table style="float: right;">
+    <tr>
+     <td><input class="form-control" style="min-width:40%" type="text" onkeydown="FilterRow(this.value)" placeholder="Search for a patient"/></td>
+     </tr>
+    </table>
+    <br>
+    
+    <h3 style="position: relative; text-align: center;">Registered Patients</h3>
+    <br>
+    <table id="patienttable" class="table table-strip table-hover table-condensed table-responsive" style="width: auto;">
+     <thead style="align-items: center; background-color:unset;">
+         <tr>
+                 <th>Registration number<b></b></th>
+                 <th>Health care unit<b></b></th>
+                 <th>Patient name<b></b></th>
+                 <th>Gender<b></b></th>
+                 <th>Date of birth<b></b></th>
+                 <th>Address<b></b></th>
+                 <th>contact<b></b></th>
+                 <th>Next of kin<b></b></th>
+                 <th>Contact phone<b></b></th>
+                 <th>Religion<b></b></th>
+                 <th>Tribe<b></b></th>
+                 <th>Profession<b></b></th>
+                 <th>Bloodgroup<b></b></th>
+                 <th>allergy<b></b></th>
+                 <th>Action<b></b></th>
+                     
+         </tr>
+     </thead>
+     {% for patient in patients %}
+     <tr>
+         <td>{{patient.registrationnumber}}</td>
+         <td>{{patient.healthcareunit}}</td>
+         <td>{{patient.patientname}}</td>
+         <td>{{patient.gender}}</td>
+         <td>{{patient.dob}}</td>
+         <td>{{patient.address}}</td>
+         <td>{{patient.contact}}</td>
+         <td>{{patient.nextofkin}}</td>
+         <td>{{patient.contactphone}}</td>
+         <td>{{patient.religion}}</td>
+         <td>{{patient.tribe}}</td>
+         <td>{{patient.profession}}</td>
+         <td>{{patient.bloodgroup}}</td>
+         <td>{{patient.allergy}}</td>
+         <td>
+         <a class="btn btn-sm" href="{{url_for('editpatient', id=patient.id)}}"><span class="glyphicon glyphicon-pencil"></span></a>
+         <a class="btn btn-sm" href="{{url_for('deletepatient', id=patient.id)}}"><span class="glyphicon glyphicon-remove"></span></a>
+         <a class="btn btn-sm" href="{{url_for('patient_visitation', patient_id=patient.id)}}">visits</a>
+         
+         </td>
+     </tr>
+<script>
+    $('.patienttable').Datatable();
+</script>
+     {% endfor %}
+     
+    </table>
+     </div>
+    </div>
+   </div> 
+</div>
+{% endblock %}

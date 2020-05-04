@@ -6,11 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>caremax app</title>
 
-    <script type="text/javascript" src="{{url_for('static', filename='js/jquery-3.2.1.min.js')}}"></script>
-      <!-- jquery-ui css -->
-    <link href="{{url_for('static', filename='css/jquery-ui-1.12.4.min.css')}}" rel="stylesheet" type="text/css"/>
+    
+   <!-- jquery-ui css -->
+   <link href="{{url_for('static', filename='css/jquery.dataTables.min.css')}}" rel="stylesheet" type="text/css"/>
+   <link href="{{url_for('static', filename='css/jquery-ui-1.12.4.min.css')}}" rel="stylesheet" type="text/css"/>
    <!-- Bootstrap -->
    <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
+   <link href="{{url_for('static', filename='css/font-awesome.min.css')}}" rel="stylesheet" type="text/css"/>
+   <link href="{{url_for('static', filename='css/dataTables.bootstrap.min.css')}}" rel="stylesheet" type="text/css"/>
    <!-- Bootstrap rtl -->
    <!--<link href="assets/bootstrap-rtl/bootstrap-rtl.min.css" rel="stylesheet" type="text/css"/>-->
    <!-- Lobipanel css -->
@@ -27,12 +30,7 @@
         =====================================================================-->
         <!-- Start page Label Plugins 
         =====================================================================-->
-    <!-- Toastr css -->
-    <link href="{{url_for('static', filename='css/taostr.css')}}" rel="stylesheet" type="text/css"/>
-        <!-- Emojionearea -->
-    <link href="{{url_for('static', filename='css/emojionearea.min.css')}}" rel="stylesheet" type="text/css"/>
-        <!-- Monthly css -->
-    <link href="{{url_for('static', filename='css/monthly.css')}}" rel="stylesheet" type="text/css"/>
+    
         <!-- End page Label Plugins 
         =====================================================================-->
         <!-- Start Theme Layout Style
@@ -43,13 +41,8 @@
         <!-- End Theme Layout Style
         =====================================================================-->
     <link rel="stylesheet" href="{{url_for('static', filename='vendors/jquery-ui/jquery-ui.css')}}">   
-    <link rel="stylesheet" href="{{url_for('static', filename='css/bootstrap.min.css')}}">
-	<link rel="stylesheet" href="static/vendors/linericon/style.css">
-	<link rel="stylesheet" href="static/css/font-awesome.min.css">
-	<link rel="stylesheet" href="static/vendors/owl-carousel/owl.carousel.min.css">
-	<link rel="stylesheet" href="static/vendors/lightbox/simpleLightbox.css">
-	<link rel="stylesheet" href="static/vendors/nice-select/css/nice-select.css">
-	<link rel="stylesheet" href="static/vendors/animate-css/animate.css">
+    
+    
 </head>
 
 <body>
@@ -77,7 +70,7 @@
                     <div class="navbar-custom-menu">
                         <ul class="nav navbar-nav">
                             <!-- Orders -->
-                            <li class="dropdown messages-menu">
+                            <!--<li class="dropdown messages-menu">
                                <a href="#" class="dropdown-toggle admin-notification" data-toggle="dropdown"> 
                                 <i class="pe-7s-cart"></i>
                                 <span class="label label-primary">5</span>
@@ -87,7 +80,7 @@
                                 <li>
                                     <ul class="menu">
                                         <li ><!-- start Order -->
-                                         <a href="#" class="border-gray">
+                                        <!-- <a href="#" class="border-gray">
                                             <div class="pull-left">
                                                 <img src="assets/dist/img/stethescope.png" class="img-thumbnail" alt="User Image"></div>
                                                 <h4>stethescope</h4>
@@ -128,7 +121,7 @@
                                         </ul>
                                     </li>
                             <!-- Messages -->
-                            <li class="dropdown messages-menu">
+                           <!-- <li class="dropdown messages-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="pe-7s-mail"></i>
                                     <span class="label label-success">4</span>
@@ -140,7 +133,7 @@
                                     <li>
                                         <ul class="menu">
                                             <li><!-- start message -->
-                                               <a href="#" class="border-gray">
+                                                <!--<a href="#" class="border-gray">
                                                     <div class="pull-left">
                                                     <img src="assets/dist/img/avatar2.png" class="img-thumbnail" alt="User Image"></div>
                                                     <h4>Alrazy</h4>
@@ -200,7 +193,7 @@
                                 </ul>
                             </li>
                             <!-- Notifications -->
-                            <li class="dropdown notifications-menu">
+                            <!--<li class="dropdown notifications-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="pe-7s-bell"></i>
                                     <span class="label label-warning">8</span>
@@ -239,7 +232,7 @@
                                 </ul>
                             </li>
                             <!-- Tasks -->
-                            <li class="dropdown tasks-menu">
+                            <!--<li class="dropdown tasks-menu">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="pe-7s-file"></i>
                                     <span class="label label-danger">9</span>
@@ -249,7 +242,7 @@
                                     <li>
                                         <ul class="menu">
                                             <li> <!-- Task item -->
-                                                <a href="#">
+                                                <!--<a href="#">
                                                     <h3>
                                                         <i class="fa fa-check-circle"></i> Data table error
                                                         <span class="label-primary label label-default pull-right">35%</span>
@@ -262,7 +255,7 @@
                                                 </a>
                                             </li> <!-- end task item -->
                                             <li> <!-- Task item -->
-                                                <a href="#">
+                                                <!--<a href="#">
                                                     <h3>
                                                       <i class="fa fa-check-circle"></i>  Change theme color
                                                        <span class="label-success label label-default pull-right">55%</span>
@@ -275,7 +268,7 @@
                                                 </a>
                                             </li> <!-- end task item -->
                                             <li> <!-- Task item -->
-                                                <a href="#">
+                                                <!--<a href="#">
                                                     <h3>
                                                         <i class="fa  fa-check-circle"></i> Change the font-family 
                                                         <span class="label-info label label-default pull-right">60%</span>
@@ -288,7 +281,7 @@
                                                 </a>
                                             </li> <!-- end task item -->
                                             <li> <!-- Task item -->
-                                                <a href="#">
+                                                <!--<a href="#">
                                                     <h3>
                                                        <i class="fa  fa-check-circle"></i> Animation should be skip
                                                        <span class="label-warning label label-default pull-right">80%</span>
@@ -301,16 +294,17 @@
                                                 </a>
                                             </li>
                                             <!-- end task item -->
-                                        </ul>
+                                        <!--</ul>
                                     </li>
                                     <li class="footer"><a href="#">See all tasks <i class=" fa fa-arrow-right"></i></a></li>
                                 </ul>
 
-                            </li>
+                            </li>-->
                             <!-- user -->
                             <li class="dropdown dropdown-user admin-user">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
                                 <div class="user-image">
+                                   <h7> Welcome <strong>{{current_user.username.upper()}}</strong> </h7>
                                 <img src="{{url_for('static', filename='img/t1.jpg')}}" class="img-circle" height="40" width="40" alt="User Image">
                                 </div>
                                 </a>
@@ -323,6 +317,7 @@
                         </ul>
                     </div>
                 </nav>
+                
             </header>
             <!-- =============================================== -->
             <!-- Left side column. contains the sidebar -->
@@ -335,7 +330,7 @@
                             <!--<img src="assets/dist/img/avatar5.png" class="img-circle" alt="User Image">-->
                         </div>
                         <div class="info">
-                            <h4>Welcome {{ current_user.username}}</h4>
+                            <h4 style="color: white; text-align: center;" >caremax</h4>
                             <!--<p>Mr. Alrazy</p>-->
                         </div>
                     </div>
@@ -343,7 +338,7 @@
                     <!-- sidebar menu -->
                     <ul class="sidebar-menu">
                         <li class="active">
-                            <a href="index.html"><i class="fa fa-hospital-o"></i><span>Dashboard</span>
+                            <a href="{{url_for('dashboard')}}"><i class="fa fa-home"></i><span>Dashboard</span>
                             </a>
                         </li>
                         <!---<li class="treeview">
@@ -361,7 +356,7 @@
                         </li>-->
                         <li class="treeview">
                             <a href="#">
-                                <i class="fa fa-user"></i><span>Patient</span>
+                                <i class="fa fa-bed"></i><span>Patient</span>
                                 <span class="pull-right-container">
                                     <i class="fa fa-angle-left pull-right"></i>
                                 </span>
@@ -371,104 +366,32 @@
                                 <li><a href="{{url_for('patient')}}">patient list</a></li>
                             </ul>
                         </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fa fa-sitemap"></i><span>Visitation</span>
-                                <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="{{url_for('newvisitation', patient_id=patient_id)}}">Add Visitation</a></li>
-                                <li><a href="{{url_for('visitation', patient_id=patient_id)}}">visitation list</a></li>
-                            </ul>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fa fa-list-alt"></i> <span>Test</span>
-                                <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="{{url_for('newtest', patient_id=patient_id)}}">Add test</a></li>
-                                <li><a href="{{url_for('test', patient_id=patient_id)}}">test list</a></li>
-                                
-                            </ul>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fa fa-check-square-o"></i><span>Appionment</span>
-                                <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="{{url_for('newappointment', patient_id=patient_id)}}">Add appoinemnt</a></li>
-                                <li><a href="{{url_for('appointment', patient_id=patient_id)}}">Appionment list</a></li>
-                            </ul>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fa fa-credit-card-alt"></i><span>Payment</span>
-                                <span class="pull-right-container">
-                                <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="{{url_for('newpayment', patient_id=patient_id)}}">Add payment</a></li>
-                                <li><a href="{{url_for('payment', patient_id=patient_id)}}">Payment list</a></li>
-                            </ul>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fa fa-sitemap"></i><span>Bill</span>
-                                <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="{{url_for('newbill', patient_id=patient_id)}}">Add bill</a></li>
-                                <li><a href="{{url_for('bill', patient_id=patient_id)}}">bill list</a></li>
-                            </ul>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fa fa-sitemap"></i><span>Treatment</span>
-                                <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <li><a href="{{url_for('newtreatment', patient_id=patient_id)}}">Add treatment</a></li>
-                                <li><a href="{{url_for('treatment', patient_id=patient_id)}}">treatment list</a></li>
-                            </ul>
-                        </li>
-                        <li class="treeview">
-                            <a href="#">
-                                <i class="fa fa-sitemap"></i><span>Prescription </span>
-                                <span class="pull-right-container">
-                                    <i class="fa fa-angle-left pull-right"></i>
-                                </span>
-                            </a>
-                            <ul class="treeview-menu">
-                                <!--<li><a href="{{url_for('newvisitation')}}">Add treatment</a></li>-->
-                                <li><a href="{{url_for('profile')}}">Prescription history</a></li>
-                            </ul>
-                        </li>
-                        <!--<li class="treeview">
-                            <a href="#">
-                              <i class="fa fa-file-text"></i><span>Report</span>
-                              <span class="pull-right-container">
-                            <i class="fa fa-angle-left pull-right"></i>
-                            </span>
-                        </a>
+                       
                         <ul class="treeview-menu">
                             <li><a href="patient-wise-report.html">Patient wise Report</a></li>
                             <li><a href="doctor-wise-report.html">Doctor wise Report</a></li>
                             <li><a href="total-report.html">Total Report</a></li>
                         </ul>
-                    </li>-->
+                    </li>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-user"></i><span>Users</span>
+                            <span class="pull-right-container">
+                                <i class="fa fa-angle-left pull-right"></i>
+                            </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="{{url_for('newregistration')}}">Add User</a></li>
+                            <li><a href="{{url_for('registration')}}">User list</a></li>
+                        </ul>
+                    </li>
+                   
+                    <ul class="treeview-menu">
+                        <li><a href="patient-wise-report.html">Patient wise Report</a></li>
+                        <li><a href="doctor-wise-report.html">Doctor wise Report</a></li>
+                        <li><a href="total-report.html">Total Report</a></li>
+                    </ul>
+                </li>
                     <!--<li class="treeview">
                         <a href="widgets.html">
                             <i class="fa fa-user-circle-o"></i><span>Human Resources</span>
@@ -583,83 +506,30 @@
                         <li><a href="layout_collapsed_sidebar.html">collapsed layout</a></li>
                     </ul>
                 </li>                
-            </ul>
-        </div> <!-- /.sidebar -->
+            </ul>  
+        </div>  /.sidebar -->
     </aside>
 
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    <div class="alert alert-{{category}}">
-    {{message}}
-    </div>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
-
     {% block content %}
-
+    
     {% endblock %}
 
-  
-    <script src="{{url_for('static', filename='js/jquery-ui/jquery-ui.js')}}"></script>
-	<script src="{{url_for('static', filename='js/popper.js')}}"></script>
-	<script src="{{url_for('static', filename='js/bootstrap.min.js')}}"></script>
-    <script src="{{url_for('static', filename='vendors/nice-select/js/jquery.nice-select.min.js')}}"></script>
-	<script src="{{url_for('static', filename='vendors/isotope/isotope-min.js')}}"></script>
+    <script src="{{url_for('static', filename='js/datatables.min.js')}}"></script>
+    
+    <!--<script src="{{url_for('static', filename='js/jquery-3.4.1.slim.js')}}" type="text/javascript"></script>-->
+    <script src="{{url_for('static', filename='js/popper.js')}}"></script>
+    <script src="{{url_for('static', filename='js/jquery-1.12.4.min.js')}}" type="text/javascript"></script>
+    <script src="{{url_for('static', filename='js/jquery.easyModal.js')}}" type="text/javascript"></script>
+    
+    <script src="{{url_for('static', filename='js/bootstrap.min.js')}}" type="text/javascript"></script>
+    <!--<script type="text/javascript" src="{{url_for('static', filename='js/jquery-3.2.1.min.js')}}"></script>-->
+    <!--<script type="text/javascript" src="{{url_for('static', filename='js/jquery-ui-1.12.1.min.js')}}"></script>-->
 	<script src="{{url_for('static', filename='vendors/owl-carousel/owl.carousel.min.js')}}"></script>
-	<script src="{{url_for('static', filename='js/jquery.ajaxchimp.min.js')}}"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0.0/jquery.counterup.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
-	<script src="{{url_for('static', filename='js/mail.script.js')}}"></script>
-	<script src="static/js/custom.js"></script>
-   <!-- jQuery -->
-        <script src="{{url_for('static', filename='js/jquery-1.12.4.min.js')}}" type="text/javascript"></script>
-        <!-- jquery-ui --> 
-        <script src="{{url_for('static', filename='js/jquery-ui-1.12.1.min.js')}}" type="text/javascript"></script>
-        <!-- Bootstrap -->
-        <script src="{{url_for('static', filename='js/bootstrap.min.js')}}" type="text/javascript"></script>
-        <!-- lobipanel -->
-        <script src="{{url_for('static', filename='js/lobipanel.min.js')}}" type="text/javascript"></script>
-        <!-- Pace js -->
-        <script src="{{url_for('static', filename='js/pace.min.js')}}" type="text/javascript"></script>
-        <!-- SlimScroll -->
-        <script src="{{url_for('static', filename='js/slimScoll.js')}}" type="text/javascript"></script>
-        <!-- FastClick -->
-        <script src="{{url_for('static', filename='js/fastclick.js')}}" type="text/javascript"></script>
-        <!-- Hadmin frame -->
-        <script src="{{url_for('static', filename='js/custom1.js')}}" type="text/javascript"></script>
-        <!-- End Core Plugins
-        =====================================================================-->
-        <!-- Start Page Lavel Plugins
-        =====================================================================-->
-        <!-- Toastr js -->
-        <script src="{{url_for('static', filename='js/toastr.min.js')}}" type="text/javascript"></script>
-        <!-- Sparkline js -->
-        <script src="{{url_for('static', filename='js/sparkline.min.js')}}" type="text/javascript"></script>
-        <!-- Data maps js -->
-        <script src="assets/plugins/datamaps/d3.min.js" type="text/javascript"></script>
-        <script src="assets/plugins/datamaps/topojson.min.js" type="text/javascript"></script>
-        <script src="assets/plugins/datamaps/datamaps.all.min.js" type="text/javascript"></script>
-        <!-- Counter js -->
-        <script src="{{url_for('static', filename='js/wayspoints.min.js')}}" type="text/javascript"></script>
-        <script src="{{url_for('static', filename='js/counterup.min.js')}}" type="text/javascript"></script>
-        <!-- ChartJs JavaScript -->
-        <script src="{{url_for('static', filename='js/chart.min.js')}}" type="text/javascript"></script>
-        <script src="{{url_for('static', filename='js/emojionearea.min.js')}}" type="text/javascript"></script>
-        <!-- Monthly js -->
-        <script src="{{url_for('static', filename='js/monthly.min.js')}}" type="text/javascript"></script>
-        <!-- Data maps -->
-        <script src="assets/plugins/datamaps/d3.min.js" type="text/javascript"></script>
-        <script src="assets/plugins/datamaps/topojson.min.js" type="text/javascript"></script>
-        <script src="assets/plugins/datamaps/datamaps.all.min.js" type="text/javascript"></script>
-      
-        <!-- End Page Lavel Plugins
-        =====================================================================-->
-        <!-- Start Theme label Script
-        =====================================================================-->
-        <!-- Dashboard js -->
-        <script src="{{url_for('static', filename='js/custom.js')}}" type="text/javascript"></script>
+	<!--<script src="{{url_for('static', filename='js/jquery.ajaxchimp.min.js')}}"></script>-->
+    <script src="{{url_for('static', filename='js/custom1.js')}}" type="text/javascript"></script>
+    <script src="{{url_for('static', filename='js/dataTables.bootstrap.min.js')}}" type="text/javascript"></script>
+        <!-- End Core Plugins-->
+        
 </div>
 </body>
 </html>

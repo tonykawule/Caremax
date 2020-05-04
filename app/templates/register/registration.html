@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="jumbotron">
+
+        <!--Flash Messages-->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{category}}">
+        {{message}}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <!--End flash message-->
+        
+    <h3>User List</h3>
+    <div class="card-panel">
+    <table class="table table-strip table-bordered table-hover table-condensed table-responsive">
+     <thead style="align-items: center;">
+         <tr>
+                 <th>Username</th>
+                 <th>Email</th>
+                 <th>Password</th>
+                 <th>Role</th>
+                 <th>Action</th>
+                     
+         </tr>
+     </thead>
+     {% for user in user %}
+     <tr>
+         <td>{{user.username}}</td>
+         <td>{{user.email}}</td>
+         <td>{{user.password}}</td>
+         <td>{{user.role}}</td>
+         <td>
+             <a class="btn btn-success btn-xs" href=""><span class="glyphicon glyphicon-pencil"></span></a>
+             <a class="btn btn-danger btn-xs" href=""><span class="glyphicon glyphicon-trash"></span></a>
+         </td>
+     </tr>
+
+     {% endfor %}
+     
+    </table>
+    </div>
+    </div>
+{% endblock %}
+

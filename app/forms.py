@@ -1,85 +1,75 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, TextAreaField, SelectField, DateField
-from wtforms.validators import DataRequired, Length, Email, ValidationError
+from wtforms import StringField, PasswordField, IntegerField, TextAreaField, validators
+from wtforms.validators import DataRequired, Length, Email, ValidationError, InputRequired
 from app.models import User
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), Length(min=5, max=50)])
-    email = StringField('Email', validators=[DataRequired(), Email(), Length(min=8, max=20)])
-    password_hash = PasswordField('Password_hash', validators=[DataRequired(), Length(min=4, max=20)])
-    role = StringField('Role', validators=[DataRequired(), Length(min=5, max=50)])
-
-    def validate_username(self, username):
-        user = User.query.filter_by(username=username.data).first()
-        if user:
-            raise ValidationError('That username already exists, please use another one')
-
-    def validate_username(self, email):
-        user = User.query.filter_by(email=email.data).first()
-        if user:
-            raise ValidationError('That email already exists, please use another one')    
+    username = StringField('Username', [validators.DataRequired(), Length(min=5, max=30, message='Username must be between 5 to 20 characters')])
+    email = StringField('Email', [validators.DataRequired(),Email(), Length(min=8, max=30, message='Email must be between 8 to 30 characters')])
+    password_hash = PasswordField('Password_hash', [validators.DataRequired(), Length(min=6, max=20, message='Password must be between 8 to 30 characters')])
+    role = StringField('Role', [validators.DataRequired(), Length(min=5, max=20, message='Role must be between 5 to 20 characters')])
 
 
 class LoginForm(FlaskForm):
-     username = StringField('Username', validators=[DataRequired(), Length(min=5, max=50)])
-     password_hash = PasswordField('Password', validators=[DataRequired(), Length(min=4, max=20)])
+     username = StringField('Username', [validators.DataRequired(), Length(min=5, max=20, message='Username must be between 5 to 20 characters')])
+     password_hash = PasswordField('Password', [validators.DataRequired(), Length(min=6, max=20, message='Password must be between 6 to 20 characters')])
      
 
 class PatientForm(FlaskForm):
-    registrationnumber = StringField('Registrationnumber', validators=[DataRequired(), Length(min=5, max=10)])
-    healthcareunit = StringField('Health care unit', validators=[DataRequired(), Length(min=8, max=50)])
-    patientname = StringField('Patient name', validators=[DataRequired(), Length(min=8, max=20)])
-    gender = StringField('Gender', validators=[DataRequired()])
-    dob = StringField('Date of Birth', validators=[DataRequired(), Length(min=9, max=10)])
-    address = StringField('Address', validators=[DataRequired(), Length(min=5, max=50)])
-    contact = StringField('Contact', validators=[DataRequired(), Length(min=5, max=20)])
-    nextofkin = StringField('Next of kin', validators=[DataRequired(), Length(min=8, max=50)])
-    contactphone = StringField('Contact phone', validators=[DataRequired(), Length(min=5, max=20)])
-    religion = StringField('Religion', validators=[DataRequired, Length(min=5, max=20)])
-    tribe = StringField('Tribe', validators=[DataRequired(), Length(min=5, max=20)])
-    bloodgroup = StringField('Bloodgroup', validators=[DataRequired(), Length(min=2, max=15)])
-    allergy = TextAreaField('Allergy', validators=[DataRequired(), Length(min=4, max=100)])
-    profession = StringField('Profession', validators=[DataRequired(), Length(min=5, max=50)])
-    
+    registrationnumber = StringField('Registrationnumber', [validators.DataRequired(), Length(min=3, max=10, message='RegNo must be between 3 to 10 characters')])
+    healthcareunit = StringField('Health care unit', [validators.DataRequired(), Length(min=8, max=30, message='Unit name must be between 8 to 30 characters')])
+    patientname = StringField('Patient name', [validators.DataRequired(), Length(min=8, max=30, message='Patient name must be between 8 to 30 characters')])
+    gender = StringField('Gender', [validators.DataRequired(), Length(min=8, max=30, message='Gender must be  4 and 6 characters')])
+    dob = StringField('Date of Birth', [validators.DataRequired(), Length(min=10, max=10, message='Date must be  10 characters')]) 
+    address = StringField('Address', [validators.DataRequired(), Length(min=8, max=30, message='Address must be between 5 to 30 characters')])
+    contact = StringField('Contact', [validators.DataRequired(), Length(min=10, max=13, message='Contact must be between 10 to 13 characters')])
+    nextofkin = StringField('Next of kin', [validators.DataRequired(), Length(min=8, max=30, message='Name must be between 8 to 30 characters')]) 
+    contactphone = StringField('Contact phone', [validators.DataRequired(), Length(min=10, max=13, message='Contact must be between 8 to 30 characters')]) 
+    religion = StringField('Religion', [validators.DataRequired(), Length(min=5, max=12, message='Religion must be between 8 to 30 characters')]) 
+    tribe = StringField('Tribe', [validators.DataRequired(), Length(min=5, max=20, message='Tribe must be between 5 to 20 characters')])
+    profession = StringField('Profession', [validators.DataRequired(), Length(min=5, max=20, message='Profession must be between 5 to 20 characters')]) 
+    bloodgroup = StringField('Bloodgroup', [validators.DataRequired(), Length(min=2, max=3, message='Bloodgroup must be between 2 to 3 characters')]) 
+    allergy = TextAreaField('Allergy', [validators.DataRequired(), Length(min=4, max=50, message='Allergy must be between 4 to 50 characters')])
+        
 class VisitationForm(FlaskForm):
-    visitationdate = StringField('Visitation date', validators=[DataRequired(), Length(min=9, max=10)])
-    presentcomplaint = TextAreaField('Present Complaint', validators=[DataRequired(), Length(min=5, max=100)])
-    previouscomplaint = TextAreaField('Previous Complaint', validators=[DataRequired(), Length(min=5, max=100)])
-    comment = TextAreaField('Comment', validators=[DataRequired(), Length(min=5, max=100)])
+    visitationdate = StringField('Visitation date', [validators.DataRequired(), Length(min=10, max=10, message='Date must be  10 characters')])
+    presentcomplaint = TextAreaField('Present Complaint', [validators.DataRequired(), Length(min=4, max=30, message='Present complaint must be between 4 to 30 characters')])
+    previouscomplaint = TextAreaField('Previous Complaint', [validators.DataRequired(), Length(min=4, max=30, message='Previous complaint must be between 4 to 30 characters')])
+    comment = TextAreaField('Comment', [validators.DataRequired(), Length(min=8, max=30, message='Comment must be between 8 to 30 characters')])
        
 
 class AppointmentForm(FlaskForm):
-    appointmentdate = StringField('Appointment date', validators=[DataRequired(), Length(min=9, max=10)])
-    appointmenttime = StringField('Appointment time', validators=[DataRequired(), Length(min=3, max=7)])
-    contact = StringField('Contact', validators=[DataRequired()])
-    message = TextAreaField('Message', validators=[DataRequired(), Length(min=10, max=100)])
+    appointmentdate = StringField('Appointment date', [validators.DataRequired(), Length(min=10, max=10, message='Date must be  10 characters')])
+    appointmenttime = StringField('Appointment time', [validators.DataRequired(), Length(min=3, max=6, message='Time must be  3 to 6 characters')])
+    contact = StringField('Contact', [validators.DataRequired(), Length(min=10, max=13, message='Contact must be  10 to 13 characters')])
+    message = TextAreaField('Message', [validators.DataRequired(), Length(min=10, max=50, message='Message must be between 10 and 50 characters')])
     
 
 class PaymentForm(FlaskForm):
-    paymentdate = StringField('Payment date', validators=[DataRequired(), Length(min=9, max=10)])
-    amountpaid = IntegerField('Amount Paid', validators=[DataRequired()])
-    balance = IntegerField('Balance', validators=[DataRequired()])
-    payeename = StringField('Payee Name', validators=[DataRequired(), Length(min=8, max=50)])
+    paymentdate = StringField('Payment date', [validators.DataRequired(), Length(min=10, max=10, message='Date must be  10 characters')])
+    amountpaid = IntegerField('Amount Paid', [validators.DataRequired()])
+    balance = IntegerField('Balance')
+    payeename = StringField('Payee Name', [validators.DataRequired(), Length(min=8, max=30, message='Payee name must be between 8 and 30 characters')])
      
 
 class BillForm(FlaskForm):
-    billdate = StringField('Bill date', validators=[DataRequired(), Length(min=9, max=10)])
-    amountbilled = IntegerField('Amount Bill', validators=[DataRequired()])
-    patientname = StringField('Patient Name', validators=[DataRequired(), Length(min=8, max=50)])
+    billdate = StringField('Bill date', [validators.DataRequired(), Length(min=10, max=10, message='Date must be  10 characters')])
+    amountbilled = IntegerField('Amount Bill', [validators.DataRequired()])
+    patientname = StringField('Patient Name', [validators.DataRequired(), Length(min=8, max=30, message='Payee name must be between 8 to 30 characters')])
     
 
 class TreatmentForm(FlaskForm):
-    diagnosis = StringField('Diagnosis', validators=[DataRequired(), Length(min=5, max=40)])
-    treatment = StringField('Treatment Name', validators=[DataRequired(), Length(min=5, max=40)])
-    dosage = TextAreaField('Dosage', validators=[DataRequired(), Length(min=5, max=100)])
+    diagnosis = StringField('Diagnosis', [validators.DataRequired(), Length(min=5, max=20, message='Diagnosis must be between 5 to 20 characters')])
+    treatment = StringField('Treatment Name', [validators.DataRequired(), Length(min=5, max=30, message='Treatment must be between 5 to 30 characters')])
+    dosage = TextAreaField('Dosage', [validators.DataRequired(), Length(min=8, max=30, message='Dosage must be between 8 to 50 characters')])
     
 
 class TestForm(FlaskForm):
-    testname = StringField('Test Name', validators=[DataRequired(), Length(min=3, max=50)])
-    testresults = TextAreaField('Test Results', validators=[DataRequired(), Length(min=8, max=100)])
+    testname = StringField('Test Name', [validators.DataRequired(), Length(min=3, max=40, message='Test name must be between 3 to 40 characters')])
+    testresults = TextAreaField('Test Results', [validators.DataRequired(), Length(min=8, max=100, message='Test results  must be between 8 to 100 characters')])
 
 class HealthcareunitForm(FlaskForm):
-    healthcareunit = StringField('Health care unit', validators=[DataRequired(), Length(min=8, max=50)])
-    address = TextAreaField('Address', validators=[DataRequired(), Length(min=8, max=100)])    
+    healthcareunit = StringField('Health care unit', [validators.DataRequired()])
+    address = StringField('Address', [validators.DataRequired()])
 
                     

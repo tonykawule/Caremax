@@ -6,7 +6,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, login_required, logout_user, current_user
 from .forms import RegistrationForm, LoginForm, PatientForm, PaymentForm, BillForm, TreatmentForm, VisitationForm, TestForm, AppointmentForm,HealthcareunitForm
 from app import forms
-
+from sqlalchemy.exc import IntegrityError
+from datetime import datetime, timedelta, timezone
 
 @app.route("/")
 def index():
@@ -50,99 +51,107 @@ def contact():
     return render_template('contact.html')               
 
 @app.route("/registration", methods = ["POST", "GET"])
-#@login_required
+@login_required
 def registration():
     if request.method =='GET':
         user = User.query.all()
-        return render_template('registration.html', user=user)
+        return render_template('register/registration.html', user=user)
         
     if request.method =='POST':
-        form = RegistrationForm()
+        form = RegistrationForm(request.form)
         if form.validate_on_submit():
-            username = request.form['username']
-            email = request.form['email']
-            password_hash = request.form['password_hash']
-            role = request.form['role']
-            user = User(username=username,email=email,password_hash=generate_password_hash(password_hash, method='sha256'), role=role)
-            db.session.add(user)
-            db.session.commit()
-            user = User.query.all()
-            flash(f'Account has been successfully created for {form.username.data}, you can now Login please', 'success')
-            return redirect(url_for('login'))
+            try:
+                username = form.username.data
+                email = form.email.data
+                password_hash = form.password_hash.data
+                role = form.role.data
+                user = User(username=username,email=email,password_hash=generate_password_hash(password_hash, method='sha256'), role=role)
+                db.session.add(user)
+                db.session.commit()
+                user = User.query.all()
+                flash(f'Account has been successfully created for {form.username.data}, you can now Login please', 'success')
+                return redirect(url_for('login'))
+            except IntegrityError:
+                db.session.rollback()
+                flash(f'Username already taken, please find another username', 'alert alert-danger')
+                return render_template("register/newregistration.html", form=form)
         else:
-            return render_template('newregistration.html', form=form)
+            return render_template('register/newregistration.html', form=form)
     return render_template('login.html', title='Login', form=form)
 
-@app.route("/registration/newregistration") 
-#@login_required   
+@app.route("/register/newregistration") 
+@login_required   
 def newregistration():
    form = RegistrationForm()
-   return render_template('newregistration.html', form=form)
+   return render_template('register/newregistration.html', form=form)
 
 @app.route("/login", methods = ["GET", "POST"])
 def login():
-    form = LoginForm()
+    form = LoginForm(request.form)
     if form.validate_on_submit():
         user = User.query.filter_by(username=form.username.data).first()
         if user:
             if check_password_hash(user.password_hash, form.password_hash.data):
-                login_user(user, current_user, duration=None)
-                flash('welcome to caremax please get started', 'info')
+                login_user(user, current_user)
+                flash('Welcome to caremax please get started', 'success')
                 return redirect(url_for('dashboard'))
         else:
-            flash('Login unsuccessful, please try again', 'warning')               
+            flash('Login unsuccessful, please check your login credentials and try again', 'warning')               
     return render_template('login.html', title='login', form=form)
     
 @app.route('/logout') 
 def logout():
     logout_user()
+    flash(f'You have logged out successfully!, can login again', 'success')
     return redirect(url_for('login')) 
      
 #PATIENT BLOCK
-@app.route("/patient/", methods = ["POST", "GET"])
+@app.route("/patient", methods = ["POST", "GET"])
 @login_required
 def patient():
-    if request.method =='GET':
-        patient = Patient.query.all()
-        return render_template('patient.html', patient=patient)
-    
-    if request.method =='POST':
-        form = PatientForm(request.form)
-        registrationnumber=request.form['registrationnumber']
-        healthcareunit=request.form['healthcareunit']
-        patientname=request.form['patientname']
-        gender=request.form['gender']
-        dob=request.form['dob']
-        address=request.form['address']
-        contact=request.form['contact']
-        nextofkin=request.form['nextofkin']
-        contactphone=request.form['contactphone']
-        religion=request.form['religion']
-        tribe=request.form['tribe']
-        profession=request.form['profession']
-        bloodgroup=request.form['bloodgroup']
-        allergy=request.form['allergy']
-        patient = Patient(registrationnumber=registrationnumber,healthcareunit=healthcareunit,patientname=patientname,gender=gender,dob=dob,address=address,contact=contact,nextofkin=nextofkin,contactphone=contactphone,religion=religion ,tribe=tribe,profession=profession,bloodgroup=bloodgroup,allergy=allergy)
-        db.session.add(patient)
-        db.session.commit()
-        patient = Patient.query.all()
-        flash(f'{form.patientname.data} has been saved successfully!', 'success')
-        return redirect(url_for('patient'))
-    else:
-        return render_template('newpatient.html', form=form)    
-    return render_template('patient.html', patient=patient)
-
-@app.route("/patient/newpatient")
+    if request.method =="GET":
+        patients=Patient.query.all()
+        return render_template("patients/patient.html", patients=patients)
+    form = PatientForm(request.form)
+    if request.method =="POST":
+        try:
+            new_patient= Patient(
+                form.registrationnumber.data, 
+                form.healthcareunit.data, 
+                form.patientname.data,
+                form.gender.data,
+                form.dob.data,
+                form.address.data,
+                form.contact.data,
+                form.nextofkin.data,
+                form.contactphone.data,
+                form.religion.data,
+                form.tribe.data,
+                form.profession.data,
+                form.bloodgroup.data,
+                form.allergy.data)  
+            db.session.add(new_patient)
+            db.session.commit()
+            flash(f'{form.patientname.data} account has been successfully created!', 'success')
+            return redirect(url_for('patient'))
+        except IntegrityError:
+            db.session.rollback()
+            flash(f'Patient Registration Number already exists and please give a patient a unique RegNo', 'warning') 
+            return render_template("patients/newpatient.html", form=form) 
+    return render_template("patients/patient.html", patients=patients) 
+              
+#NEW PATIENNT
+@app.route("/patients/newpatient")
 @login_required
 def newpatient():
     form = PatientForm()
-    return render_template('newpatient.html', form=form )  
+    return render_template('patients/newpatient.html', form=form )  
 
 #edit patient
-@app.route("/patient/editpatient/<int:patient_id>", methods= ['GET', 'POST'])
+@app.route("/patients/<int:id>/editpatient", methods= ['GET', 'POST'])
 @login_required
-def editpatient(patient_id):
-    patient = Patient.query.get(patient_id)
+def editpatient(id):
+    patient = Patient.query.get(id)
     form = PatientForm(obj=patient)
     if request.method == 'POST':
         patient.registrationnumber = form.registrationnumber.data
@@ -160,401 +169,283 @@ def editpatient(patient_id):
         patient.allergy = form.allergy.data
         patient.profession = form.profession.data
         db.session.commit()
-        flash('Patient information updated successfully', 'success')
+        flash('Patient information updated successfully', 'info')
         return redirect(url_for('patient'))    
-    return render_template('editpatient.html', form=form) 
+    return render_template('patients/editpatient.html', form=form) 
 
 #delete patient
-@app.route("/patient/deletepatient/<int:patient_id>")
+@app.route("/patient/<int:id>/deletepatient")
 @login_required
-def deletepatient(patientid):
-    patient = Patient.query.get(patientid)
+def deletepatient(id):
+    patient = Patient.query.get(id)
     db.session.delete(patient)
     db.session.commit() 
     flash('Patient deleted successfully!!', 'danger')
     return redirect(url_for('patient'))    
 
- #end Patient
+#end Patient
 
- #start Visits
-@app.route("/visitation", methods=['GET', 'POST'])
+#START OF VISITATION
+ # see all visits for a specific patient and a new visitation
+@app.route('/patients/<int:patient_id>/visitations', methods=["GET", "POST"])
 @login_required
-def visitation(patient_id):
-    if request.method =='GET':
-        visits = Visitation.query.all()
-        return render_template('visitation.html', visits=visits)
-
+def patient_visitation(patient_id):
+    #find a patient
     if request.method =='POST':
         form = VisitationForm(request.form)
         if form.validate_on_submit():
-            visitationdate = request.form['visitationdate']
-            presentcomplaint = request.form['presentcomplaint']
-            previouscomplaint = request.form['previouscomplaint'] 
-            comment = request.form['comment']
-            patient_id = request.form['patient_id']
-            visits = Visitation(visitationdate=visitationdate,presentcomplaint=presentcomplaint,previouscomplaint=previouscomplaint,comment=comment,patient_id=patient_id)  
-            db.session.add(visits)    
+            new_visit = Visitation(form.visitationdate.data, form.presentcomplaint.data, form.previouscomplaint.data, form.comment.data, patient_id)
+            db.session.add(new_visit)
             db.session.commit()
-            visits = Visitation.query.all()
-            flash(f'Visitation has been submitted successfully!', 'success')
-            return redirect(url_for('visitation'))
+            flash(f'New visitation for has been successfully saved', 'success')
+            return redirect(url_for('patient_visitation', patient_id=patient_id))
         else:
-           return render_template('newvisitation.html', form=form)    
-        return render_template('visitation.html', visits=visits, patient=Patient.query.get(patient_id))
+           return render_template('visitations/newvisitation.html', form=form, patient_id=patient_id, patient=Patient.query.get(patient_id))                         
+    return render_template("visitations/visitation.html", patient=Patient.query.get(patient_id))
 
-@app.route("/visitation/newvisitation")
+#New Visitation
+@app.route('/patient/<int:patient_id>/visitation', methods=["GET", "POST"])
 @login_required
 def newvisitation(patient_id):
-    form = VisitationForm()
-    return render_template('newvisitation.html', form=form, patient=Patient.query.get(patient_id))
+    form=VisitationForm()
+    return render_template('visitations/newvisitation.html', form=form, patient=Patient.query.get(patient_id))
 
-#edit visitation
-@app.route("/visitation/editvisitation/<int:visitationid>", methods= ['GET', 'POST'])
+#Edit a patient visitation
+@app.route('/patient/<int:patient_id>/visitations/<int:id>/editvisitation', methods=["GET", "POST"])
 @login_required
-def editvisitation(visitation_id):
-    visit = Visitation.query.get(visitation_id)
-    form = VisitationForm(obj=visit)
-    if form.validate_on_submit():
-        visit.visitationdate = form.visitationdate.data
-        visit.presentcomplaint = form.presentcomplaint.data
-        visit.previouscomplaint = form.previouscomplaint.data
-        visit.comment = form.comment.data
+def editvisitation(patient_id, id):
+    visitation = Visitation.query.get(id)
+    form = VisitationForm(obj=visitation)
+    if request.method == 'POST':
+        visitation.visitationdate =  form.visitationdate.data
+        visitation.presentcomplaint = form.presentcomplaint.data
+        visitation.previouscomplaint = form.previouscomplaint.data
+        visitation.comment = form.comment.data
         db.session.commit()
-        flash('Patient visitation updated successfully', 'success')
-        return redirect(url_for('visitation'))    
-    return render_template('editvisitation.html', form=form) 
+        flash(f'Visitation updated successfully!', 'success')
+        return redirect(url_for('patient_visitation', patient_id=patient_id))
+    return render_template("visitations/editvisitation.html", form=form, patient=Patient.query.get(patient_id))
 
-#delete visitation
-@app.route("/visitation/deletevisitation/<int:visitation_id>")
+#Delete and edit a visit for a specific patient
+  
+#START OF TEST
+ # see all test for a specific patient and a new visitation
+@app.route('/patients/<int:patient_id>/tests', methods=["GET", "POST"])
 @login_required
-def deletevisitation(visitation_id):
-    visitation = Visitation.query.get(visitation_id)
-    db.session.delete(visitation)
-    db.session.commit()
-    flash('Visitation deleted successfully!!', 'danger')
-    return redirect(url_for('visitation'))        
-#end visits
-
-#start Appointment
-
-@app.route("/appointment", methods = ["POST", "GET"])
-@login_required
-def appointment():
-    if request.method =='GET':
-        appointments = Appointment.query.all()
-        return render_template('appointment.html', appointments=appointments)
-    
+def patient_test(patient_id):
+    #find a patient
     if request.method =='POST':
-        form = AppointmentForm(request.form)
+        form = TestForm(request.form)
         if form.validate_on_submit():
-            appointmentdate = request.form['appointmentdate']
-            appointmenttime = request.form['appointmenttime']
-            contact = request.form['contact'] 
-            message = request.form['message']
-            patient_id = request.form['patient_id']
-            appointments = Appointment(appointmentdate=appointmentdate,appointmenttime=appointmenttime,contact=contact,message=message,patientid=patient_id)  
-            db.session.add(appointments)    
+            new_test = Test(form.testname.data, form.testresults.data, patient_id)
+            db.session.add(new_test)
             db.session.commit()
-            appointments = Appointment.query.all()
-            flash(f'Your appointment has been submitted successfully!', 'success')
-            return redirect(url_for('appointment'))
+            flash(f'New Test for has been successfully saved', 'success')
+            return redirect(url_for('patient_test', patient_id=patient_id))
         else:
-           return render_template('newappointment.html', form=form)    
-        return render_template('appointment.html', appointments=appointments)
+           return render_template('tests/newtest.html', form=form, patient_id=patient_id, patient=Patient.query.get(patient_id))                         
+    return render_template("tests/test.html", patient=Patient.query.get(patient_id))
 
-@app.route("/appointment/newappointment")
+#New Test
+@app.route('/patient/<int:patient_id>/test', methods=["GET", "POST"])
 @login_required
-def newappointment():
-    form = AppointmentForm()
-    return render_template('newappointment.html', form=form)
+def newtest(patient_id):
+    form=TestForm()
+    return render_template('tests/newtest.html', form=form, patient=Patient.query.get(patient_id))
 
-#edit appointment
-@app.route("/appointment/editappointment/<int:appointmentid>", methods= ['GET', 'POST'])
-@login_required
-def editappointment(appointmentid):
-    appointment = Appointment.query.get(appointmentid)
-    form = AppointmentForm(obj=appointment)
-    if form.validate_on_submit():
-        appointment.appointmentdate = form.appointmentdate.data
-        appointment.appointmenttime = form.appointmenttime.data
-        appointment.contact = form.contact.data
-        appointment.message = form.message.data
+#Edit a patient Test
+@app.route('/patient/<int:patient_id>/visitation/<int:id>/editvisitation', methods=["GET", "POST"])
+def edittest(patient_id, id):
+    test = Test.query.get(id)
+    form = TestForm(obj=test)
+    if request.method == 'POST':
+        test.testname =  form.testname.data
+        test.testresults = form.testresults.data
         db.session.commit()
-        flash('Patient appointment updated successfully', 'success')
-        return redirect(url_for('appointment'))    
-    return render_template('editappointment.html', form=form)    
+        flash(f'Test updated successfully!', 'success')
+        return redirect(url_for('patient_test', patient_id=patient_id))
+    return render_template("tests/edittest.html", form=form, patient=Patient.query.get(patient_id))
 
-#delete appointment
-@app.route("/appointment/deleteappointment/<int:appointmentid>")
+#Delete a visit for a specific patient
+#@app.route('/patient/<int:patient_id>/visitation/<int:id>/deletevisitation', methods=["GET", "POST"])
+#def patient_visitation(patient_id, id):
+#    pass
+
+# End of Test
+
+#START OF TREATMENT
+ # see all test for a specific patient and a new visitation
+@app.route('/patients/<int:patient_id>/treatments', methods=["GET", "POST"])
 @login_required
-def deleteappointment(appointmentid):
-    appointment = Appointment.query.get(appointmentid)
-    db.session.delete(appointment)
-    db.session.commit()
-    flash('Appointment deleted successfully!!', 'danger')
-    return redirect(url_for('appointment'))     
+def patient_treatment(patient_id):
+    
+    #find a patient
+    if request.method =='POST':
+        form = TreatmentForm(request.form)
+        if form.validate_on_submit():
+            new_treatment = Treatment(form.diagnosis.data, form.treatment.data, form.dosage.data, patient_id)
+            db.session.add(new_treatment)
+            db.session.commit()
+            flash(f'New Treatment for has been successfully saved', 'success')
+            return redirect(url_for('patient_treatment', patient_id=patient_id))
+        else:
+           return render_template('treatments/newtreatment.html', form=form, patient_id=patient_id, patient=Patient.query.get(patient_id))                         
+    return render_template("treatments/treatment.html", patient=Patient.query.get(patient_id))
 
-#end Appointment
-#start Payment
-@app.route("/payment", methods = ["POST", "GET"])
+#New Test
+@app.route('/patient/<int:patient_id>/treatment', methods=["GET", "POST"])
 @login_required
-def payment():
-    if request.method =='GET':
-        payments = Payment.query.all()
-        return render_template('payment.html', payments=payments)
+def newtreatment(patient_id):
+    form=TreatmentForm()
+    return render_template('treatments/newtreatment.html', form=form, patient=Patient.query.get(patient_id))
 
+#Edit a patient Treatment
+@app.route('/patient/<int:patient_id>/treatments/<int:id>/edittreatment', methods=["GET", "POST"])
+@login_required
+def edittreatment(patient_id, id):
+    treatment = Treatment.query.get(id)
+    form = TreatmentForm(obj=treatment)
+    if request.method == 'POST':
+        treatment.diagnosis =  form.diagnosis.data
+        treatment.treatment = form.treatment.data
+        treatment.dosage = form.dosage.data
+        db.session.commit()
+        flash(f'Treatment updated successfully!', 'success')
+        return redirect(url_for('patient_treatment', patient_id=patient_id))
+    return render_template("treatments/edittreatment.html", form=form, patient=Patient.query.get(patient_id))
+
+
+#Delete a treatment for a specific patient
+#@app.route('/patient/<int:patient_id>/visitation/<int:id>/deletevisitation', methods=["GET", "POST"])
+#def patient_visitation(patient_id, id):
+#    pass
+
+# End of Treatment
+
+#START OF PAYMENT
+ # see all payment for a specific patient and a new payment
+@app.route('/patients/<int:patient_id>/payments', methods=["GET", "POST"])
+@login_required
+def patient_payment(patient_id):
+    
+    #find a patient
     if request.method =='POST':
         form = PaymentForm(request.form)
         if form.validate_on_submit():
-            paymentdate = request.form['paymentdate']
-            amountpaid = request.form['amountpaid']
-            balance = request.form['balance'] 
-            payeename = request.form['payeename']
-            patient_id = request.form['patient_id']
-            payments = Payment(paymentdate=paymentdate,amountpaid=amountpaid,balance=balance,payeename=payeename,patient_id=patient_id)  
-            db.session.add(payments)    
+            new_payment = Payment(form.paymentdate.data, form.amountpaid.data, form.balance.data, form.payeename.data, patient_id)
+            db.session.add(new_payment)
             db.session.commit()
-            visits = Payment.query.all()
-            flash(f'Payment has been submitted successfully!', 'success')
-            return redirect(url_for('payment'))
+            flash(f'New Payment for has been successfully saved', 'success')
+            return redirect(url_for('patient_payment', patient_id=patient_id))
         else:
-           return render_template('newpayment.html', form=form)    
-        return render_template('payment.html', payments=payments) 
+           return render_template('payments/newpayment.html', form=form, patient_id=patient_id, patient=Patient.query.get(patient_id))                        
+    return render_template("payments/payment.html", patient=Patient.query.get(patient_id))
 
-@app.route("/payment/newpayment")
+#New Payment
+@app.route('/patient/<int:patient_id>/payment', methods=["GET", "POST"])
 @login_required
-def newpayment():
-    form = PaymentForm()
-    return render_template('newpayment.html', form=form)  
+def newpayment(patient_id):
+    form=PaymentForm()
+    return render_template('payments/newpayment.html', form=form, patient=Patient.query.get(patient_id))
 
-#edit payment
-@app.route("/payment/editpayment/<int:paymentid>", methods= ['GET', 'POST'])
+#Edit a patient payment
+@app.route('/patient/<int:patient_id>/payments/<int:id>/editpayment', methods=["GET", "POST"])
 @login_required
-def editpayment(paymentid):
-    payment = Payment.query.get(paymentid)
+def editpayment(patient_id, id):
+    payment = Payment.query.get(id)
     form = PaymentForm(obj=payment)
-    if form.validate_on_submit():
-        payment.paymentdate = form.paymentdate.data
+    if request.method == 'POST':
+        payment.paymentdate =  form.paymentdate.data
         payment.amountpaid = form.amountpaid.data
         payment.balance = form.balance.data
         payment.payeename = form.payeename.data
         db.session.commit()
-        flash('Patient payment updated successfully', 'success')
-        return redirect(url_for('payment'))    
-    return render_template('editpayment.html', form=form)    
+        flash(f'Payment updated successfully!', 'success')
+        return redirect(url_for('patient_payment', patient_id=patient_id))
+    return render_template("payments/editpayment.html", form=form, patient=Patient.query.get(patient_id))
 
-#delete payment
-@app.route("/payment/deletepayment/<int:paymentid>")
+#START OF BILL
+ # see all bill for a specific patient and a new payment
+@app.route('/patients/<int:patient_id>/bills', methods=["GET", "POST"])
 @login_required
-def deletepayment(paymentid):
-    payment = Payment.query.get(paymentid)
-    db.session.delete(payment)
-    db.session.commit()
-    flash('Payment deleted successfully!!', 'danger')
-    return redirect(url_for('payment'))
-
-#end Payment
-#start Bill
-@app.route("/bill", methods = ["POST", "GET"])
-@login_required
-def bill():
-    if request.method =='GET':
-        bills = Bill.query.all()
-        return render_template('bill.html', bills=bills)
-
+def patient_bill(patient_id):
+    
+    #find a patient
     if request.method =='POST':
         form = BillForm(request.form)
         if form.validate_on_submit():
-            billdate = request.form['billdate']
-            amountbilled = request.form['amountbilled']
-            patientname = request.form['patientname']
-            patient_id = request.form['patientid'] 
-            bills = Bill(billdate=billdate,amountbilled=amountbilled,patientname=patientname,patientid=patient_id)  
-            db.session.add(bills)    
+            new_bill = Bill(form.billdate.data, form.amountbilled.data, form.patientname.data, patient_id)
+            db.session.add(new_bill)
             db.session.commit()
-            bills = Bill.query.all()
-            flash(f'Bill has been submitted successfully!', 'success')
-            return redirect(url_for('bill'))
+            flash(f'New Bill for has been successfully saved', 'success')
+            return redirect(url_for('patient_bill', patient_id=patient_id))
         else:
-           return render_template('newbill.html', form=form)    
-        return render_template('bill.html', bills=bills)
+           return render_template('bills/newbill.html', form=form, patient_id=patient_id, patient=Patient.query.get(patient_id))                         
+    return render_template("bills/bill.html", patient=Patient.query.get(patient_id))
 
-@app.route("/bill/newbill")
+#New Bill
+@app.route('/patient/<int:patient_id>/bill', methods=["GET", "POST"])
 @login_required
-def newbill():
-    form = BillForm()
-    return render_template('newbill.html', form=form)  
+def newbill(patient_id):
+    form=BillForm()
+    return render_template('bills/newbill.html', form=form, patient=Patient.query.get(patient_id))
 
-#edit bill
-@app.route("/bill/editbill/<int:billid>", methods= ['GET', 'POST'])
+#Edit a patient payment
+@app.route('/patient/<int:patient_id>/bills/<int:id>/editbill', methods=["GET", "POST"])
 @login_required
-def editbill(billid):
-    bill = Bill.query.get(billid)
+def editbill(patient_id, id):
+    bill = Bill.query.get(id)
     form = BillForm(obj=bill)
-    if form.validate_on_submit():
-        bill.billdate = form.billdate.data
+    if request.method == 'POST':
+        bill.billdate =  form.billdate.data
         bill.amountbilled = form.amountbilled.data
         bill.patientname = form.patientname.data
         db.session.commit()
-        flash('Patient bill updated successfully', 'success')
-        return redirect(url_for('bill'))    
-    return render_template('editbill.html', form=form) 
+        flash(f'Bill updated successfully!', 'success')
+        return redirect(url_for('patient_bill', patient_id=patient_id))
+    return render_template("bills/editbill.html", form=form, patient=Patient.query.get(patient_id))
 
-#delete bill
-@app.route("/bill/deletebill/<int:billid>")
+#Delete a treatment for a specific patient
+#@app.route('/patient/<int:patient_id>/visitation/<int:id>/deletevisitation', methods=["GET", "POST"])
+#def patient_visitation(patient_id, id):
+#    pass
+
+# End of Treatment
+
+#START OF APPOINTMENTS
+ # see all bill for a specific patient and a new payment
+@app.route('/patients/<int:patient_id>/appointments', methods=["GET", "POST"])
 @login_required
-def deletebill(billid):
-    bill = Bill.query.get(billid)
-    db.session.delete(bill)
-    db.session.commit()
-    flash('Bill deleted successfully!!', 'danger')
-    return redirect(url_for('bill'))       
-#end Bill
-
-#start Treatment
-@app.route("/treatment", methods = ["POST", "GET"])
-@login_required
-def treatment():
-    if request.method =='GET':
-        treatments = Treatment.query.all()
-        return render_template('treatment.html', treatments=treatments)
-
+def patient_appointment(patient_id):
+    
+    #find a patient
     if request.method =='POST':
-        form = TreatmentForm(request.form)
+        form = AppointmentForm()
         if form.validate_on_submit():
-            diagnosis = request.form['diagnosis']
-            treatment = request.form['treatment']
-            dosage = request.form['dosage'] 
-            patient_id = request.form['patient_id']
-            treatments = Treatment(diagnosis=diagnosis,treatment=treatment,dosage=dosage,patient_id=patient_id)  
-            db.session.add(treatments)    
+            new_appointment = Appointment(form.appointmentdate.data, form.appointmenttime.data, form.contact.data, form.message.data, patient_id)
+            db.session.add(new_appointment)
             db.session.commit()
-            treatments = Treatment.query.all()
-            flash(f'Treatment has been submitted successfully!', 'success')
-            return redirect(url_for('treatment'))
+            flash(f'Your appointment has been forwarded successfully', 'success')
+            return redirect(url_for('patient_appointment', patient_id=patient_id))
         else:
-           return render_template('newtreatment.html', form=form)    
-        return render_template('treatment.html', treatments=treatments)
+           return render_template('appointments/newappointment.html', form=form, patient_id=patient_id, patient=Patient.query.get(patient_id))                        
+    return render_template("appointments/appointment.html", patient=Patient.query.get(patient_id))
 
-@app.route("/treatment/newtreatment")
+#New Appointment
+@app.route('/patient/<int:patient_id>/appointment', methods=["GET", "POST"])
 @login_required
-def newtreatment():
-    form = TreatmentForm()
-    return render_template('newtreatment.html', form=form) 
+def newappointment(patient_id):
+    form=AppointmentForm()
+    return render_template('appointments/newappointment.html', form=form, patient=Patient.query.get(patient_id))
 
-#edit treatment module
-@app.route("/treatment/edittreatment/<int:treatmentid>", methods= ['GET', 'POST'])
-@login_required
-def edittreatement(treatmentid):
-    treatment = Treatment.query.get(treatmentid)
-    form = TreatmentForm(obj=treatment)
-    if form.validate_on_submit():
-        treatment.diagnosis = form.diagnosis.data
-        treatment.treatment = form.treatment.data
-        treatment.dosage = form.dosage.data
-        db.session.commit()
-        flash('Patient treatment updated successfully', 'success')
-        return redirect(url_for('treatment'))    
-    return render_template('edittreatment.html', form=form) 
+#Edit a patient payment
+#@app.route('/patient/<int:patient_id>/visitation/<int:id>/editvisitation', methods=["GET", "POST"])
+#def patient_visitation(patient_id, id):
+#    pass
 
-#delete treatment
-@app.route("/treatment/deletetreatment/<int:treatmentid>")
-@login_required
-def deletetreatment(treatmentid):
-    treatment = Treatment.query.get(treatmentid)
-    db.session.delete(treatment)
-    db.session.commit()
-    flash('Treatment deleted successfully!!', 'danger')
-    return redirect(url_for('treatment'))
-       
-#end treatment
+#Delete a treatment for a specific patient
+#@app.route('/patient/<int:patient_id>/visitation/<int:id>/deletevisitation', methods=["GET", "POST"])
+#def patient_visitation(patient_id, id):
+#    pass
 
-#start Test
-@app.route("/test/", methods = ["POST", "GET"])
-@login_required
-def test():
-    if request.method =='GET':
-        tests = Test.query.all()
-        return render_template('test.html', tests=tests)
-
-    if request.method =='POST':
-        form = TestForm(request.form)
-        if form.validate_on_submit():
-            testname = request.form['testname']
-            testresults = request.form['testresults']
-            patient_id = request.form['patient_id']
-            tests = Test(testname=testname, testresults=testresults,patient_id=patient_id)
-            db.session.add(tests)
-            db.session.commit()
-            #tests = Test.query.filter_by(patient_id).first() 
-            flash('Patient test has been saved successfully!', 'success')
-            return redirect(url_for('test'))
-        else:
-           return render_template('newtest.html', title='Add Test', form=form )  
-        return render_template('test.html', tests=tests)
-
-@app.route("/test/newtest")
-@login_required
-def newtest():
-    form = TestForm()
-    return render_template('newtest.html', form=form) 
-#edit test module
-
-@app.route("/test/edittest/<int:testid>", methods= ['GET', 'POST'])
-@login_required
-def edittest(testid):
-    test = Test.query.get(testid)
-    form = TestForm(obj=test)
-    if form.validate_on_submit():
-        test.testname = form.testname.data
-        test.testresults = form.testresults.data
-        db.session.commit()
-        flash('Patient test updated successfully', 'success')
-        return redirect(url_for('test'))    
-    return render_template('edittest.html', form=form)
-#delete test module
-@app.route("/test/deletetest/<int:testid>", methods= ['GET', 'POST'])
-@login_required
-def deletetest(testid):
-    test = Test.query.get(testid)
-    db.session.delete(test)
-    db.session.commit()
-    flash('Test deleted successfully!!', 'danger')
-    return redirect(url_for('test'))
-#end Test                          
-
-#profile
-@app.route("/profile")
-@login_required
-def profile():
-    return render_template('profile.html')
-
-#Healthcareunit
-@app.route("/healthcareunit/", methods = ["POST", "GET"])
-@login_required
-def healthcareunit():
-    if request.method =='GET':
-        healthcareunits = Healthcareunit.query.all()
-        return render_template('healthcareunit.html', healthcareunits=healthcareunits)
-
-    if request.method =='POST':
-        form = HealthcareunitForm(request.form)
-        if form.validate_on_submit():
-            healthcareunit = request.form['healthcareunit']
-            address = request.form['address']
-            #patient_id = request.form['patient_id']
-            healthcareunits = Healthcareunit(healthcareunit=healthcareunit, address=address)
-            db.session.add(healthcareunits)
-            db.session.commit()
-            #tests = Test.query.filter_by(patient_id).first() 
-            flash(' Healthe care unit has been registered successfully!', 'success')
-            return redirect(url_for('healthcareunit'))
-        else:
-           return render_template('newhealthcareunit.html', title='Add Health care unit', form=form )  
-        return render_template('healthcareunit.html', healthcareunits=healthcareunits)
-
-@app.route("/healthcareunit/newhealthcareunit") 
-def newhealthcareunit():
-    return render_template('newhealthcareunit.html')
-
-
+# End of Treatment

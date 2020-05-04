@@ -1,0 +1,48 @@
+
+<!--{% extends 'base.html' %}
+
+{% block content %}
+
+<div role="dialog" id="myModal" class="modal fade">
+<div class="modal-dialog modal-fade" id="myModal">
+      <div class="modal-content"> 
+           <div class="modal-header"> 
+               <button type="button" class="close" data-dismiss="modal" aria-label="close"><span aria-hidden="true">&times;</span></button>
+               <h4 class="modal-title" >new health unit</h4>
+               <hr>
+               <div class="modal-body">
+
+                    <form action="{{url_for('healthcareunit')}}" method="POST">
+         
+                         {{ form.hidden_tag() }}
+                         {% for field in form if field.widget.input_type != 'hidden' %}
+                         <p>
+                         {{field.label (class="form-control-lable")}}
+                         {{field (class="form-control form-control-md")}}
+                         
+                         <span>
+                         {% if field.errors %}
+                          {% for error in field.errors %}
+                           {{ error }}
+                         {% endfor %}
+                         {% endif %}
+                         </span>
+                  
+                         </p>
+                         {% endfor %}
+                    <div class="modal-footer">
+                         <button type="submit" class="btn btn-primary">Enter Patient</button>
+                         <button type="reset" class="btn btn-default" data-dismiss="modal">Reset</button>
+                    </div>
+                      </form>
+                      </div>
+                      </div>
+                  </div>
+
+               </div>
+
+</div>
+</div>
+</div>
+</div>
+{% endblock %}

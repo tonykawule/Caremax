@@ -1,0 +1,121 @@
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="content-wrapper">
+  <div class="jumbotron">
+
+    <!--Flash Messages-->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    {% for category, message in messages %}
+    <div class="alert alert-{{category}}">
+    {{message}}
+    </div>
+    {% endfor %}
+    {% endif %}
+    {% endwith %}
+    <!--End flash message-->
+
+    <!--Patient navigation-->
+    <nav class="navbar navbar-expand-md navbar-default bg-default sticky-top" style="width: auto;
+    background-color: white; text-align: right;">
+        <button class="navbar-toggler"  type="button" data-toggle="collapse" data-target="#navbarResponsive">
+            <span class="sr-only"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="nav navbar-nav navbar-right">
+                    <!--<li class="nav-item ">
+                        <a class="nav-link" href="{{url_for('newvisitation', patient_id=patient.id)}}">Visits</a>
+                    </li>-->
+                    <li class="dropdown">
+                      <a href="#" class="drown-toggle" data-toggle="dropdown">Visitation<span class="caret"></span>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{url_for('newvisitation', patient_id=patient.id)}}">Add new</a></li>
+                            <li><a href="{{url_for('patient_visitation', patient_id=patient.id)}}">View visits</a></li>
+                        </ul>
+                    </a>
+                  </li>
+                    <li class="dropdown">
+                        <a href="#" class="drown-toggle" data-toggle="dropdown">Test<span class="caret"></span>
+                          <ul class="dropdown-menu">
+                              <li><a href="{{url_for('newtest', patient_id=patient.id)}}">Add new</a></li>
+                              <li><a href="{{url_for('patient_test', patient_id=patient.id)}}">View tests</a></li>
+                          </ul>
+                      </a>
+                    </li>
+                    <li class="dropdown">
+                      <a href="#" class="drown-toggle" data-toggle="dropdown">Treatment<span class="caret"></span>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{url_for('newtreatment', patient_id=patient.id)}}">Add new</a></li>
+                            <li><a href="{{url_for('patient_treatment', patient_id=patient.id)}}">View treatments</a></li>
+                        </ul>
+                    </a>
+                  </li>
+                  <li class="dropdown">
+                      <a href="#" class="drown-toggle" data-toggle="dropdown">Payment<span class="caret"></span>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{url_for('newpayment', patient_id=patient.id)}}">Add new</a></li>
+                            <li><a href="{{url_for('patient_payment', patient_id=patient.id)}}">View payments</a></li>
+                        </ul>
+                    </a>
+                  </li>
+                  <li class="dropdown">
+                      <a href="#" class="drown-toggle" data-toggle="dropdown">Bill<span class="caret"></span>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{url_for('newbill', patient_id=patient.id)}}">Add new</a></li>
+                            <li><a href="{{url_for('patient_bill', patient_id=patient.id)}}">View bills</a></li>
+                        </ul>
+                    </a>
+                  </li>
+                  <li class="dropdown">
+                      <a href="#" class="drown-toggle" data-toggle="dropdown">Appointmt<span class="caret"></span>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{url_for('newappointment', patient_id=patient.id)}}">Add new</a></li>
+                            <li><a href="{{url_for('patient_appointment', patient_id=patient.id)}}">View tests</a></li>
+                        </ul>
+                    </a>
+                  </li>
+
+                </ul>
+
+            </div>
+              
+     </nav>
+
+  <!--End of Patient navigation-->
+
+            <h3>Test list for {{patient.patientname}}</h3>
+              <br>
+    
+                <table style="width: 50%;" class="table table-strip table-bordered table-hover table-condensed table-responsive">
+                 <thead style="align-items: center;">
+                 <tr>
+                 <th>Test Name</th>
+                 <th>Test Results</th>
+                 <th>Action</th>
+                 
+         </tr>
+     </thead>
+     {% for test in patient.tests %}
+     <tr>
+         <td>{{test.testname}}</td>
+         <td>{{test.testresults}}</td>
+         
+         <td>
+          <a href="{{url_for('edittest', patient_id=patient.id, id=test.id)}}"><span class="glyphicon glyphicon-pencil"></span></a>
+         </td>
+     </tr>
+
+     {% endfor %}
+     
+    </table>
+    </div>
+    </div>
+</div>
+
+
+{% endblock %}

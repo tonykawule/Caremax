@@ -5,6 +5,7 @@ from flask_migrate import Migrate, MigrateCommand
 from flask_login import LoginManager
 from flask_session import Session
 import os
+from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
 

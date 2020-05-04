@@ -1,11 +1,12 @@
 from flask_login import UserMixin
 from app import db
+from datetime import datetime
 
 class User(UserMixin, db.Model):
-    __tablename__='user'
+    __tablename__='users'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), nullable=False, index=True)
-    email = db.Column(db.String(50), nullable=False, unique=True)
+    username = db.Column(db.String(50), nullable=False, unique=True)
+    email = db.Column(db.String(50), nullable=False, index=True)
     password_hash = db.Column(db.String(90), nullable=False)
     role = db.Column(db.String (20), nullable=False)
     
@@ -15,15 +16,14 @@ class User(UserMixin, db.Model):
         self.password_hash = password_hash
         self.role = role
 
-
 class Patient(db.Model):
-    __tablename__='patient'
+    __tablename__='patients'
     id = db.Column(db.Integer, primary_key=True)
     registrationnumber = db.Column(db.String(10), nullable=False, unique=True)
     healthcareunit = db.Column(db.String(50), nullable=False,)
     patientname = db.Column(db.String(50), nullable=False)
     gender = db.Column(db.String(6), nullable=False)
-    dob = db.Column(db.String, nullable=False)
+    dob = db.Column(db.DateTime)
     address = db.Column(db.String(50), nullable=False)
     contact = db.Column(db.Integer, nullable=False)
     nextofkin = db.Column(db.String(50), nullable=False)
@@ -40,7 +40,7 @@ class Patient(db.Model):
     bills = db.relationship('Bill', backref='patient', lazy="dynamic", cascade="all, delete")
     tests = db.relationship('Test', backref='patient', lazy="dynamic", cascade="all, delete")
 
-    def __init__(self, registrationnumber, healthcareunit, patientname, gender, dob, address, contact, nextofkin, contactphone, religion, tribe, profession, bloodgroup, allergy):
+    def __init__(self,registrationnumber, healthcareunit, patientname, gender, dob, address, contact, nextofkin, contactphone, religion, tribe, profession, bloodgroup, allergy):
         self.registrationnumber=registrationnumber
         self.healthcareunit=healthcareunit
         self.patientname=patientname
@@ -57,15 +57,15 @@ class Patient(db.Model):
         self.allergy=allergy
 
 class Visitation(db.Model):
-    __tablename__='visitation'
+    __tablename__='visitations'
     id = db.Column(db.Integer, primary_key=True)
     visitationdate = db.Column(db.String(10), nullable=False)
     presentcomplaint = db.Column(db.String(100), nullable=False)
     previouscomplaint = db.Column(db.String(100), nullable=False)
     comment = db.Column(db.String(100), nullable=False)
-    patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'))
+    patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'))
 
-    def __init__(self, visitationdate, presentcomplaint, previouscomplaint, comment, patientid):
+    def __init__(self, visitationdate, presentcomplaint, previouscomplaint, comment, patient_id):
         self.visitationdate=visitationdate
         self.presentcomplaint=presentcomplaint
         self.previouscomplaint=previouscomplaint
@@ -74,13 +74,13 @@ class Visitation(db.Model):
 
 
 class Appointment(db.Model):
-    __tablename__='appointment'
+    __tablename__='appointments'
     id = db.Column(db.Integer, primary_key=True)
     appointmentdate = db.Column(db.String(10), nullable=False) 
     appointmenttime = db.Column(db.String(8), nullable=False)
     contact = db.Column(db.Integer, nullable=False)
     message = db.Column(db.String(100), nullable=False)
-    patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'))
+    patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'))
 
     def __init__(self, appointmentdate, appointmenttime, contact, message, patient_id ):
         self.appointmentdate=appointmentdate
@@ -90,13 +90,13 @@ class Appointment(db.Model):
         self.patient_id=patient_id
 
 class Payment(db.Model):
-    __tablename__='payment'
+    __tablename__='payments'
     id=db.Column(db.Integer, primary_key=True)
     paymentdate=db.Column(db.String(50), nullable=False)
     amountpaid=db.Column(db.Float, nullable=False)
     balance=db.Column(db.Float, nullable=False)
     payeename=db.Column(db.String(50), nullable=False)
-    patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'))
+    patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'))
 
     def __init__(self, paymentdate, amountpaid, balance, payeename, patient_id):
         self.paymentdate=paymentdate
@@ -117,12 +117,12 @@ class Healthcareunit(db.Model):
 
 
 class Treatment(db.Model):
-    __tablename__='treatment'
+    __tablename__='treatments'
     id=db.Column(db.Integer, primary_key=True) 
     diagnosis=db.Column(db.String(40), nullable=False)
     treatment=db.Column(db.String(40), nullable=False)
     dosage=db.Column(db.String(100), nullable=False)
-    patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'))
+    patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'))
 
     def __init__(self, diagnosis, treatment, dosage, patient_id):
         self.diagnosis=diagnosis
@@ -131,11 +131,11 @@ class Treatment(db.Model):
         self.patient_id=patient_id
 
 class Test(db.Model):
-    __tablename__='test'
+    __tablename__='tests'
     id=db.Column(db.Integer, primary_key=True)
     testname=db.Column(db.String(50), nullable=False)
     testresults=db.Column(db.String(100), nullable=False)
-    patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'))
+    patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'))
 
     def __init__(self, testname, testresults, patient_id):
         self.testname=testname
@@ -143,12 +143,12 @@ class Test(db.Model):
         self.patient_id=patient_id
 
 class Bill(db.Model):
-    __tablename__='bill'
+    __tablename__='bills'
     id=db.Column(db.Integer, primary_key=True)
     billdate=db.Column(db.String(10), nullable=False)
     amountbilled=db.Column(db.Float, nullable=False)
     patientname=db.Column(db.String(50), nullable=False)
-    patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'))
+    patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'))
 
     def __init__(self, billdate, amountbilled, patientname, patient_id):
         self.billdate=billdate
