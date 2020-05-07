@@ -7,7 +7,7 @@ from flask_login import login_user, login_required, logout_user, current_user
 from .forms import RegistrationForm, LoginForm, PatientForm, PaymentForm, BillForm, TreatmentForm, VisitationForm, TestForm, AppointmentForm,HealthcareunitForm
 from app import forms
 from sqlalchemy.exc import IntegrityError
-from datetime import datetime, timedelta, timezone
+
 
 @app.route("/")
 def index():
@@ -61,11 +61,13 @@ def registration():
         form = RegistrationForm(request.form)
         if form.validate_on_submit():
             try:
+                firstname = form.firstname.data
+                lastname = form.lastname.data
                 username = form.username.data
                 email = form.email.data
                 password_hash = form.password_hash.data
                 role = form.role.data
-                user = User(username=username,email=email,password_hash=generate_password_hash(password_hash, method='sha256'), role=role)
+                user = User(firstname=firstname,lastname=lastname,username=username,email=email,password_hash=generate_password_hash(password_hash, method='sha256'), role=role)
                 db.session.add(user)
                 db.session.commit()
                 user = User.query.all()
@@ -194,7 +196,7 @@ def patient_visitation(patient_id):
     if request.method =='POST':
         form = VisitationForm(request.form)
         if form.validate_on_submit():
-            new_visit = Visitation(form.visitationdate.data, form.presentcomplaint.data, form.previouscomplaint.data, form.comment.data, patient_id)
+            new_visit = Visitation(form.visitationdate.data, form.presentcomplaint.data, form.previouscomplaint.data, form.labrecommendation.data, patient_id)
             db.session.add(new_visit)
             db.session.commit()
             flash(f'New visitation for has been successfully saved', 'success')
@@ -220,7 +222,7 @@ def editvisitation(patient_id, id):
         visitation.visitationdate =  form.visitationdate.data
         visitation.presentcomplaint = form.presentcomplaint.data
         visitation.previouscomplaint = form.previouscomplaint.data
-        visitation.comment = form.comment.data
+        visitation.labrecommendation = form.labrecommendation.data
         db.session.commit()
         flash(f'Visitation updated successfully!', 'success')
         return redirect(url_for('patient_visitation', patient_id=patient_id))
@@ -283,7 +285,7 @@ def patient_treatment(patient_id):
     if request.method =='POST':
         form = TreatmentForm(request.form)
         if form.validate_on_submit():
-            new_treatment = Treatment(form.diagnosis.data, form.treatment.data, form.dosage.data, patient_id)
+            new_treatment = Treatment(form.diagnosis.data, form.treatment.data, patient_id)
             db.session.add(new_treatment)
             db.session.commit()
             flash(f'New Treatment for has been successfully saved', 'success')
@@ -308,7 +310,6 @@ def edittreatment(patient_id, id):
     if request.method == 'POST':
         treatment.diagnosis =  form.diagnosis.data
         treatment.treatment = form.treatment.data
-        treatment.dosage = form.dosage.data
         db.session.commit()
         flash(f'Treatment updated successfully!', 'success')
         return redirect(url_for('patient_treatment', patient_id=patient_id))
@@ -332,7 +333,7 @@ def patient_payment(patient_id):
     if request.method =='POST':
         form = PaymentForm(request.form)
         if form.validate_on_submit():
-            new_payment = Payment(form.paymentdate.data, form.amountpaid.data, form.balance.data, form.payeename.data, patient_id)
+            new_payment = Payment(form.paymentdate.data, form.amountpaid.data, form.balance.data, form.payeename.data, form.naration.data, patient_id)
             db.session.add(new_payment)
             db.session.commit()
             flash(f'New Payment for has been successfully saved', 'success')
@@ -359,6 +360,7 @@ def editpayment(patient_id, id):
         payment.amountpaid = form.amountpaid.data
         payment.balance = form.balance.data
         payment.payeename = form.payeename.data
+        payment.naration = form.naration.data
         db.session.commit()
         flash(f'Payment updated successfully!', 'success')
         return redirect(url_for('patient_payment', patient_id=patient_id))

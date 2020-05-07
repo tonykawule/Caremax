@@ -5,12 +5,18 @@ from datetime import datetime
 class User(UserMixin, db.Model):
     __tablename__='users'
     id = db.Column(db.Integer, primary_key=True)
+    firstname = db.Column(db.String(20), nullable=False)
+    lastname = db.Column(db.String(20), nullable=False)
     username = db.Column(db.String(50), nullable=False, unique=True)
     email = db.Column(db.String(50), nullable=False, index=True)
     password_hash = db.Column(db.String(90), nullable=False)
-    role = db.Column(db.String (20), nullable=False)
+    role = db.Column(db.String(20), nullable=False)
+    #is_admin = db.Column(db.Boolean, default=False)
+    #is_doctor = db.Column(db.Boolean, default=False)
     
-    def __init__(self, username, email, password_hash, role):
+    def __init__(self, firstname, lastname, username, email, password_hash, role):
+        self.firstname = firstname
+        self.lastname = lastname
         self.username = username
         self.email = email
         self.password_hash = password_hash
@@ -23,7 +29,7 @@ class Patient(db.Model):
     healthcareunit = db.Column(db.String(50), nullable=False,)
     patientname = db.Column(db.String(50), nullable=False)
     gender = db.Column(db.String(6), nullable=False)
-    dob = db.Column(db.DateTime)
+    dob = db.Column(db.String(10))
     address = db.Column(db.String(50), nullable=False)
     contact = db.Column(db.Integer, nullable=False)
     nextofkin = db.Column(db.String(50), nullable=False)
@@ -62,14 +68,14 @@ class Visitation(db.Model):
     visitationdate = db.Column(db.String(10), nullable=False)
     presentcomplaint = db.Column(db.String(100), nullable=False)
     previouscomplaint = db.Column(db.String(100), nullable=False)
-    comment = db.Column(db.String(100), nullable=False)
+    labrecommendation = db.Column(db.String(100), nullable=False)
     patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'))
 
-    def __init__(self, visitationdate, presentcomplaint, previouscomplaint, comment, patient_id):
+    def __init__(self, visitationdate, presentcomplaint, previouscomplaint, labrecommendation, patient_id):
         self.visitationdate=visitationdate
         self.presentcomplaint=presentcomplaint
         self.previouscomplaint=previouscomplaint
-        self.comment=comment
+        self.labrecommendation=labrecommendation
         self.patient_id=patient_id
 
 
@@ -93,16 +99,18 @@ class Payment(db.Model):
     __tablename__='payments'
     id=db.Column(db.Integer, primary_key=True)
     paymentdate=db.Column(db.String(50), nullable=False)
-    amountpaid=db.Column(db.Float, nullable=False)
-    balance=db.Column(db.Float, nullable=False)
+    amountpaid=db.Column(db.Float)
+    balance=db.Column(db.Float)
     payeename=db.Column(db.String(50), nullable=False)
+    naration=db.Column(db.String(60), nullable=False)
     patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'))
 
-    def __init__(self, paymentdate, amountpaid, balance, payeename, patient_id):
+    def __init__(self, paymentdate, amountpaid, balance, payeename, naration, patient_id):
         self.paymentdate=paymentdate
         self.amountpaid=amountpaid
         self.balance=balance
         self.payeename=payeename
+        self.naration=naration
         self.patient_id=patient_id
 
 class Healthcareunit(db.Model):
@@ -120,21 +128,19 @@ class Treatment(db.Model):
     __tablename__='treatments'
     id=db.Column(db.Integer, primary_key=True) 
     diagnosis=db.Column(db.String(40), nullable=False)
-    treatment=db.Column(db.String(40), nullable=False)
-    dosage=db.Column(db.String(100), nullable=False)
+    treatment=db.Column(db.String(150), nullable=False)
     patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'))
 
-    def __init__(self, diagnosis, treatment, dosage, patient_id):
+    def __init__(self, diagnosis, treatment, patient_id):
         self.diagnosis=diagnosis
         self.treatment=treatment
-        self.dosage=dosage
         self.patient_id=patient_id
 
 class Test(db.Model):
     __tablename__='tests'
     id=db.Column(db.Integer, primary_key=True)
     testname=db.Column(db.String(50), nullable=False)
-    testresults=db.Column(db.String(100), nullable=False)
+    testresults=db.Column(db.String(150), nullable=False)
     patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'))
 
     def __init__(self, testname, testresults, patient_id):
@@ -146,7 +152,7 @@ class Bill(db.Model):
     __tablename__='bills'
     id=db.Column(db.Integer, primary_key=True)
     billdate=db.Column(db.String(10), nullable=False)
-    amountbilled=db.Column(db.Float, nullable=False)
+    amountbilled=db.Column(db.Float)
     patientname=db.Column(db.String(50), nullable=False)
     patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'))
 

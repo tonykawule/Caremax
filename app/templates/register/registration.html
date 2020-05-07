@@ -21,6 +21,8 @@
     <table class="table table-strip table-bordered table-hover table-condensed table-responsive">
      <thead style="align-items: center;">
          <tr>
+                 <th>First name</th>
+                 <th>Last name</th>
                  <th>Username</th>
                  <th>Email</th>
                  <th>Password</th>
@@ -31,6 +33,8 @@
      </thead>
      {% for user in user %}
      <tr>
+         <td>{{user.firstname}}</td>
+         <td>{{user.lastname}}</td>
          <td>{{user.username}}</td>
          <td>{{user.email}}</td>
          <td>{{user.password}}</td>

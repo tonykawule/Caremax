@@ -94,17 +94,14 @@
      <thead style="align-items: center;">
          <tr>
                  <th>Diagnosis</th>
-                 <th>Treatment name</th>
-                 <th>Dosage</th>
-                 <th>Action</th>
-                 
+                 <th>Treatment</th>
+                 <th>Action</th>  
          </tr>
      </thead>
      {% for treatment in patient.treatments %}
      <tr>
          <td>{{treatment.diagnosis}}</td>
          <td>{{treatment.treatment}}</td>
-         <td>{{treatment.dosage}}</td>
          <td>
           <a href="{{url_for('edittreatment', patient_id=patient.id, id=treatment.id)}}"><span class="glyphicon glyphicon-pencil"></span></a>
          </td>
