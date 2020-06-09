@@ -2,6 +2,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<link href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet" type="text/css"/>
   
 <script>
    function FilterRow(data) {
@@ -18,9 +20,10 @@
     
 }
 </script> 
-<div class="content-wrapper">
-    <div class="jumbotron" style="background-color: white">
 
+<div class="content-wrapper">
+    <div class="jumbotron">
+        <br>
          <!--Flash Messages-->
          {% with messages = get_flashed_messages(with_categories=true) %}
          {% if messages %}
@@ -37,13 +40,11 @@
     <tr>
      <td><input class="form-control" style="min-width:40%" type="text" onkeydown="FilterRow(this.value)" placeholder="Search for a patient"/></td>
      </tr>
-    </table>
+</table>
     <br>
-    
-    <h3 style="position: relative; text-align: center;">Registered Patients</h3>
-    <br>
-    <table id="patienttable" class="table table-strip table-hover table-condensed table-responsive" style="width: auto;">
-     <thead style="align-items: center; background-color:unset;">
+    <h4 style="text-align: center;"><strong>Registered patient list</strong></h4>
+    <table id="patienttable" class="table">
+     <thead>
          <tr>
                  <th>Registration number<b></b></th>
                  <th>Health care unit<b></b></th>
@@ -80,9 +81,9 @@
          <td>{{patient.bloodgroup}}</td>
          <td>{{patient.allergy}}</td>
          <td>
-         <a class="btn btn-sm" href="{{url_for('editpatient', id=patient.id)}}"><span class="glyphicon glyphicon-pencil"></span></a>
-         <a class="btn btn-sm" href="{{url_for('deletepatient', id=patient.id)}}"><span class="glyphicon glyphicon-remove"></span></a>
-         <a class="btn btn-sm" href="{{url_for('patient_visitation', patient_id=patient.id)}}">visits</a>
+         <a class="btn btn-success btn-xs" href="{{url_for('editpatient', id=patient.id)}}"><span class="glyphicon glyphicon-pencil"></span></a>
+         <a class="btn btn-danger btn-xs" href="{{url_for('deletepatient', id=patient.id)}}" onclick="return confirmOnDelete();"><span class="glyphicon glyphicon-minus"></span></a>
+         <a class="btn btn-success btn-xs" href="{{url_for('patient_visitation', patient_id=patient.id)}}">visit</a>
          
          </td>
      </tr>
@@ -94,6 +95,18 @@
     </table>
      </div>
     </div>
-   </div> 
-</div>
+  
+<script type="text/javascript">
+    function confirmOnDelete(){
+      if (confirm("Are you sure you to delete this Patient")){
+        alert("You have selected OK")
+        return true;
+      }
+      else{
+        alert("You have selected cancel")
+        return false;
+      }
+    }
+
+  </script> 
 {% endblock %}

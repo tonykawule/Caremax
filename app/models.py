@@ -2,6 +2,15 @@ from flask_login import UserMixin
 from app import db
 from datetime import datetime
 
+
+ACCESS = {
+    'patient' : 1,
+    'admin' : 2,
+    'doctor' : 3,
+    'laboratory' : 4,
+    'nurse' : 5
+}
+
 class User(UserMixin, db.Model):
     __tablename__='users'
     id = db.Column(db.Integer, primary_key=True)
@@ -10,17 +19,30 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(50), nullable=False, unique=True)
     email = db.Column(db.String(50), nullable=False, index=True)
     password_hash = db.Column(db.String(90), nullable=False)
-    role = db.Column(db.String(20), nullable=False)
-    #is_admin = db.Column(db.Boolean, default=False)
-    #is_doctor = db.Column(db.Boolean, default=False)
+    access = db.Column(db.String(10), nullable=False)
     
-    def __init__(self, firstname, lastname, username, email, password_hash, role):
+    def __init__(self, firstname, lastname, username, email, password_hash, access=ACCESS['patient']):
         self.firstname = firstname
         self.lastname = lastname
         self.username = username
         self.email = email
         self.password_hash = password_hash
-        self.role = role
+        self.access = access
+
+    def is_admin(self):
+        return self.access == ACCESS['admin'] 
+
+   # def is_doctor(self):
+    #    return self.access == ACCESS['doctor']    
+    
+    #def is_laboratory(self):
+     #   return self.access == ACCESS['laboratory']
+
+    #def is_nurse(self):
+       # return self.access == ACCESS['nurse']    
+
+    #def allowed(self, access_level):
+     #   return self.access >= access_level    
 
 class Patient(db.Model):
     __tablename__='patients'
@@ -31,9 +53,9 @@ class Patient(db.Model):
     gender = db.Column(db.String(6), nullable=False)
     dob = db.Column(db.String(10))
     address = db.Column(db.String(50), nullable=False)
-    contact = db.Column(db.Integer, nullable=False)
+    contact = db.Column(db.String(15), nullable=False)
     nextofkin = db.Column(db.String(50), nullable=False)
-    contactphone = db.Column(db.Integer, nullable=False)
+    contactphone = db.Column(db.String(15), nullable=False)
     religion = db.Column(db.String(50), nullable=False)
     tribe = db.Column(db.String(50), nullable=False)
     profession = db.Column(db.String(50), nullable=False)
@@ -99,8 +121,8 @@ class Payment(db.Model):
     __tablename__='payments'
     id=db.Column(db.Integer, primary_key=True)
     paymentdate=db.Column(db.String(50), nullable=False)
-    amountpaid=db.Column(db.Float)
-    balance=db.Column(db.Float)
+    amountpaid=db.Column(db.Integer, nullable=False)
+    balance=db.Column(db.Integer, nullable=False)
     payeename=db.Column(db.String(50), nullable=False)
     naration=db.Column(db.String(60), nullable=False)
     patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'))
@@ -152,7 +174,7 @@ class Bill(db.Model):
     __tablename__='bills'
     id=db.Column(db.Integer, primary_key=True)
     billdate=db.Column(db.String(10), nullable=False)
-    amountbilled=db.Column(db.Float)
+    amountbilled=db.Column(db.Integer)
     patientname=db.Column(db.String(50), nullable=False)
     patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'))
 

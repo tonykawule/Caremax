@@ -2,6 +2,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+<link href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet" type="text/css"/>
+<br>
 <div class="content-wrapper">
     <div class="jumbotron">
       <!--Flash Messages-->
@@ -17,15 +20,20 @@
       <!--End flash message-->
       
         <!--Patient navigation-->
-          <nav class="navbar navbar-expand-md navbar-default bg-default sticky-top" style="width: auto ;
-          background-color: white; text-align: right;">
-              <button class="navbar-toggler"  type="button" data-toggle="collapse" data-target="#navbarResponsive">
-                  <span class="sr-only"></span>
+          <nav class="navbar navbar-sticky-top" role="navigation"
+          style="position: relative;
+                 background-color: black;
+                 margin-top: 10px;">
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                  <span class="sr-only">Toggle Navigation</span>
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                   <span class="icon-bar"></span>
                 </button>
-                  <div class="collapse navbar-collapse" id="navbarResponsive">
+                <a class="navbar-brand" href="#">Caremax</a>
+              </div>
+                  <div class="navbar-collapse collapse">
                       <ul class="nav navbar-nav navbar-right">
                           <!--<li class="nav-item ">
                               <a class="nav-link" href="{{url_for('newvisitation', patient_id=patient.id)}}">Visits</a>
@@ -88,8 +96,8 @@
         <!--End of Patient navigation-->
     <h4>Visitation list for {{patient.patientname}}</h4>
     <br>
-    <table style="width: auto;" class="table table-stripped table-bordered table-hover table-condensed table-responsive">
-     <thead style="align-items: center;">
+    <table class="table table-sortable">
+     <thead>
          <tr>
                  <th>Visitation date</th>
                  <th>Present Complaint</th>
@@ -107,22 +115,12 @@
          <td>{{visitation.labrecommendation}}</td>
 
          <td>
-             <a href="{{url_for('editvisitation', patient_id=patient.id, id=visitation.id)}}"><span class="glyphicon glyphicon-pencil"></span></a>
+             <a class="btn btn-success btn-xs" href="{{url_for('editvisitation', patient_id=patient.id, id=visitation.id)}}"><span class="glyphicon glyphicon-pencil"></span></a>
          </td>
      </tr>
-     <!--<tfoot style="align-items: center;">
-        <tr>
-                <th>Visitation date</th>
-                <th>Present Complaint</th>
-                <th>Previous Complaint</th>
-                <th>Lab Recommandetion</th>
-                <th>Action</th>
-                
-        </tr>
-      </tfoot>-->
+     
      {% endfor %}
      </table>
-     
     </div>
     </div>
 {% endblock %}

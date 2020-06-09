@@ -1,0 +1,62 @@
+/*
+STYLING FOR THE PAGES
+*/
+
+.jumbotron{
+    padding: 0;
+    margin: 0;
+    background-color: whitesmoke;
+}
+ 
+.table{
+    table-layout: auto;
+    width: auto;
+    overflow-x: auto;
+    border-collapse: collapse;
+    position: relative;
+    padding-top: 1px;
+    table-layout: auto;  
+}
+tr:nth-child(even){
+    background-color: rgba(82, 84, 206, 0.062);
+}
+tr:hover{
+    background-color: rgb(7, 8, 24);
+    color: white;
+}
+th{
+    background-color: black;
+    color: white;
+}
+.navbar-brand{
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+.dropdown{
+    position: relative;
+    text-align: center;
+    font-style: normal;
+}
+.dropdown-menu{
+    text-decoration: whitesmoke;
+    border-style: none;
+    font-style: normal;
+    text-decoration-color: white;
+}
+.caret{
+    size: unset;
+    color: white;
+}
+.content{
+    background-color: white;
+    width: auto;
+    height: auto;
+}
+.content img{
+    width: 30%;
+    height: 15%;
+    z-index: 1;
+}
+.content, ol, li{
+    font-style: inherit;
+}

@@ -31,7 +31,7 @@
                          </p>
                          {% endfor %}
                     <div class="modal-footer">
-                         <button type="submit" class="btn btn-primary">upadate patient</button>
+                         <button type="submit" class="btn btn-success" onclick="return confirmOnEdit();">upadate patient</button>
                     </div>
                       </form>
                       </div>
@@ -42,4 +42,17 @@
 
 </div>
 
-{% endblock %}-->
+<script type="text/javascript">
+     function confirmOnEdit(){
+       if (confirm("Are you sure you to Update this Patient information")){
+         alert("You have selected OK")
+         return true;
+       }
+       else{
+         alert("You have selected cancel")
+         return false;
+       }
+     }
+   </script> 
+
+{% endblock %}

@@ -51,16 +51,16 @@
         <!-- Site wrapper -->
         <div class="wrapper">
             <header class="main-header">
-                <a href="index.html" class="logo"> <!-- Logo -->
+                <!--<a href="index.html" class="logo"> <!-- Logo 
                     <span class="logo-mini">
-                        <!--<b>A</b>H-admin-->
+                        <!--<b>A</b>H-admin
                         <img src="assets/dist/img/mini-logo.png" alt="">
                     </span>
                     <span class="logo-lg">
-                        <!--<b>Admin</b>H-admin-->
+                        <!--<b>Admin</b>H-admin
                         <img src="assets/dist/img/logo.png" alt="">
                     </span>
-                </a>
+                </a>-->
                 <!-- Header Navbar -->
                 <nav class="navbar navbar-static-top ">
                     <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button"> <!-- Sidebar toggle button-->
@@ -304,7 +304,7 @@
                             <li class="dropdown dropdown-user admin-user">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
                                 <div class="user-image">
-                                   <h7> Hello, <strong>{{current_user.username.upper()}}</strong> </h7>
+                                <h7>Hello, <strong>{{ current_user.username }}</strong></h7>
                                 <img src="{{url_for('static', filename='img/t1.jpg')}}" class="img-circle" height="40" width="40" alt="User Image">
                                 </div>
                                 </a>
@@ -354,6 +354,7 @@
                                 
                             </ul>
                         </li>-->
+                        
                         <li class="treeview">
                             <a href="#">
                                 <i class="fa fa-bed"></i><span>Patient</span>
@@ -366,7 +367,7 @@
                                 <li><a href="{{url_for('patient')}}">patient list</a></li>
                             </ul>
                         </li>
-                       
+                        
                         <ul class="treeview-menu">
                             <li><a href="patient-wise-report.html">Patient wise Report</a></li>
                             <li><a href="doctor-wise-report.html">Doctor wise Report</a></li>
@@ -381,11 +382,11 @@
                             </span>
                         </a>
                         <ul class="treeview-menu">
-                            <li><a href="{{url_for('newregistration')}}">Add User</a></li>
+                            <li><a href="{{url_for('newuser')}}">Register a user</a></li>
                             <li><a href="{{url_for('registration')}}">User list</a></li>
                         </ul>
                     </li>
-                   
+                    
                     <ul class="treeview-menu">
                         <li><a href="patient-wise-report.html">Patient wise Report</a></li>
                         <li><a href="doctor-wise-report.html">Doctor wise Report</a></li>

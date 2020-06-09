@@ -1,11 +1,15 @@
 {% extends 'base.html' %}
 
+
 {% block content %}
+
+<link href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet" type="text/css"/>
+
 <!--<div class="container-fluid">-->
             <!-- Content Wrapper. Contains page content -->
             <div class="content-wrapper">
               <div class="jumbotron">
-
+               <br>  
                  <!--Flash Messages-->
                  {% with messages = get_flashed_messages(with_categories=true) %}
                  {% if messages %}
@@ -45,42 +49,46 @@
             <div class="cl-mcont">		
                 <div class="row">
                   <div class="col-md-6">
-            
                     <div class="block-flat">
                       <div class="header">							
-                        <h4>Welcome to Caremax </h4>
                       </div>
                       <div class="content">
+                        <h4>Welcome to Caremax </h4>
+                        <hr>
                           <img src="{{url_for('static', filename='img/t2.jpg')}}" alt="image" />
                           <br>
                           <br>
-                          <h5>Caremax is a hospital management system designed to simplify patient management and tracking.</h5>
-                          <h5>Its developed on a secure platform that only allows registered and authorized users to gain access to it after successful login.</h5>
-
-                          <div class="card">
-                              <h4>How it works</h4>
-                              <ol>
-                                  <li></li>
-                              </ol>
-
-                          </div>
-            
+                          <h6>Caremax is a patient records management application designed to simplify patient management and tracking.</h5>
+                          <h6>Its developed on a secure platform that only allows registered and authorized users to gain access to it after successful login.</h5>
+                      </div>
+                    </div>				
+                    <div class="block-flat">
+                      <div class="header">							
+                      </div>
+                      <div class="content">
+                        <h4>Patient side </h4>
+                        <hr>
+                          <img src="{{url_for('static', filename='img/b1.jpg')}}" alt="image" />
+                          <br>
+                          <br>
+                          <h5>After a successful login a patient can be able to view the prescription history</h6>
+                          <h5>And make an apppointment where need araise</h6>
                       </div>
                     </div>				
                   </div>
             
-                
                   <div class="col-md-6">
                     <div class="block-flat">
                       <div class="header">							
-                        <h4>Our Services</h4>
+                    
                       </div>
                       <div class="content">
-            
+                        <h4>Caremax functionalities</h4>
+                         <hr>
                           <img src="{{url_for('static', filename='img/t1.jpg')}}" alt="image"/>
                           <br>
                           <br>
-                          <h4>Caremax offers the following functionalities:</h4>
+                          <h5>Caremax offers the following functionalities:</h5>
                             <ol>
                                 <li>Registration of new Patients.</li>
                                 <li>Editing of already registered patient's bio-data</li>

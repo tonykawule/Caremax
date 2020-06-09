@@ -30,7 +30,7 @@
                          </p>
                          {% endfor %}
                     <div class="modal-footer">
-                         <button type="submit" class="btn btn-primary">Enter Bill</button>
+                         <button type="submit" class="btn btn-primary" onclick="return confirmOnSubmit();">Enter Bill</button>
                          <button type="reset" class="btn btn-default" data-dismiss="modal">Reset</button>
                     </div>
                       </form>
@@ -41,7 +41,18 @@
                </div>
 
 </div>
-</div>
-</div>
-</div>
+
+<script type="text/javascript">
+     function confirmOnSubmit(){
+       if (confirm("Would you like to save this Bill")){
+         alert("You have selected OK")
+         return true;
+       }
+       else{
+         alert("You have selected cancel")
+         return false;
+       }
+     }
+   </script> 
+
 {% endblock %}

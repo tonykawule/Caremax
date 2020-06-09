@@ -1,5 +1,5 @@
 
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -48,7 +48,7 @@
                 <div class="panel-heading">
                     <div class="view-header">
                         <div class="header-icon">
-                            <i class="pe-7s-unlock"></i>
+                            <i class="fa fa-lock"></i>
                         </div>
                         <div class="header-title">
                             <h3>Login</h3>
@@ -57,7 +57,7 @@
                     </div>
                 </div>
                 <div class="panel-body">
-                    <form action="{{url_for('login')}}" method="POST"  id="LoginForm" novalidate >
+                    <form action="{{url_for('login')}}" method="POST">
                         {{ form.hidden_tag() }}
                         {% for field in form if field.widget.input_type != 'hidden' %}
                          <p>
