@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<link href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet" type="text/css" />
+
+<div class="content-wrapper">
+        <br>
+        <!--Flash Messages-->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{category}}">
+            {{message}}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <!--End flash message-->
+
+        <h4>Account information for {{family.family_name}}</h4>
+        <a class="btn btn-primary btn-xs" href="{{url_for('newaccount', family_id=family.id)}}"
+            style="float: start;">Add family file</a>
+        <br>
+        <table class="table2">
+            <thead>
+                <tr>
+                    <th>Patient name</th>
+                    <th>Visited date</th>
+                    <th>Treatment</th>
+                    <th>Bill (Ugx)</th>
+                    <th>Bill Narration</th>
+                    <th>Payment (Ugx)</th>
+                    <th>Payment Narration </th>
+                    <th>Action</th>
+
+                </tr>
+            </thead>
+            {% for account in family.accounts %}
+            <tr>
+                <td>{{account.patient_name}}</td>
+                <td>{{account.visiteddate}}</td>
+                <td>{{account.treatment}}</td>
+                <td>{{account.bill}}</td>
+                <td>{{account.bill_narration}}</td>
+                <td>{{account.payment}}</td>
+                <td>{{account.payment_narration}}</td>
+                <td>
+                    <a class="btn btn-success btn-xs"
+                        href="{{url_for('editaccount', family_id=family.id, id=account.id)}}">update</a>
+                </td>
+            </tr>
+
+            {% endfor %}
+
+        </table>
+</div>
+
+{% endblock %}

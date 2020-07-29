@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<link href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet" type="text/css" />
+
+<script>
+    function FilterRow(data) {
+        console.log("searching for " + data);
+        var filter = data;
+        var table = document.getElementById("family");
+        for (i = 1; i < table.rows.length; i++) {
+            var rowdata = table.rows[i].innerHTML;
+            console.log(rowdata.toUpperCase());
+            if (rowdata.toUpperCase().search(data.toUpperCase()) > -1) { table.rows[i].style.display = ""; }
+            else { table.rows[i].style.display = "none"; }
+        }
+
+    }
+</script>
+
+<br>
+<!--Flash Messages-->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{category}}">
+    {{message}}
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<!--End flash message-->
+<br>
+<table class="search">
+    <tr>
+        <td><input class="form-control" style="min-width:35%" type="text" onkeydown="FilterRow(this.value)"
+                placeholder="Search for a family" /></td>
+    </tr>
+</table>
+<br>
+
+<table class="table2" id="family">
+    <thead>
+        <tr>
+            <th>Family name</th>
+            <th>Location</th>
+            <th>Contact</th>
+            <th>Action</th>
+
+        </tr>
+    </thead>
+    {% for family in families %}
+    <tr>
+        <td>{{family.family_name}}</td>
+        <td>{{family.location}}</td>
+        <td>{{family.contact}}</td>
+        <td>
+            <a class="btn btn-success btn-xs" href="{{url_for('editfamily', id=family.id)}}">update</a>
+            <a class="btn btn-danger btn-xs" href="{{url_for('deletefamily', id=family.id)}}">drop</a>
+            <a class="btn btn-info btn-xs" href="{{url_for('accounts', family_id=family.id)}}">History</a>
+        </td>
+    </tr>
+
+    {% endfor %}
+
+</table>
+</div>
+</div>
+
+{% endblock %}

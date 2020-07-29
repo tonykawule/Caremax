@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<link href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet" type="text/css" />
+
+<br>
+<!--Flash Messages-->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{category}}">
+    {{message}}
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<!--End flash message-->
+
+<!--Patient navigation-->
+
+<!--End of Patient navigation-->
+
+<br>
+<table class="table2">
+    <thead>
+        <tr>
+            <th>Schedule Date</th>
+            <th>Work Schedule</th>
+            <th>Action</th>
+
+        </tr>
+    </thead>
+    {% for schedule in schedules  %}
+    <tr>
+        <td>{{schedule.schedule_date}}</td>
+        <td>{{schedule.work_schedule}}</td>
+
+        <td>
+            <a href="{{url_for('editschedule', id=schedule.id)}}"><i class="fa fa-pencil-square-o"
+                    aria-hidden="true"></i></a>
+        </td>
+    </tr>
+
+    {% endfor %}
+
+ </table>
+</div>
+
+{% endblock %}

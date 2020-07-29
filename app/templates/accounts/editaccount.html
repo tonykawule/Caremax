@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="modal-dialog modal-fade" id="myModal" modal-sm>
+  <div class="modal-content">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="close"><span
+          aria-hidden="true">&times;</span></button>
+      <h4 class="modal-title">Edit information</h4>
+      <hr>
+      <div class="modal-body">
+
+        <form action="" method="POST">
+
+          {{ form.hidden_tag() }}
+          {% for field in form if field.widget.input_type != 'hidden' %}
+          <p>
+            {{field.label (class="form-control-lable")}}
+            {{field (class="form-control form-control-md")}}
+
+            <span>
+              {% if field.errors %}
+              {% for error in field.errors %}
+              {{ error  }}
+              {% endfor %}
+              {% endif %}
+            </span>
+
+          </p>
+          {% endfor %}
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-success" onclick="return confirmOnEdit();">upadate</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</div>
+
+<script type="text/javascript">
+  function confirmOnEdit() {
+    if (confirm("Are you sure you to Update this Patient information")) {
+      alert("You have selected OK")
+      return true;
+    }
+    else {
+      alert("You have selected cancel")
+      return false;
+    }
+  }
+</script>
+
+{% endblock %}

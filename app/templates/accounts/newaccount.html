@@ -2,16 +2,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
- 
-<div class="modal-dialog modal-fade" id="myModal">
+
+<div class="modal-dialog modal-sm" id="myModal">
       <div class="modal-content"> 
            <div class="modal-header"> 
                <button type="button" class="close" data-dismiss="modal" aria-label="close"><span aria-hidden="true">&times;</span></button>
-               <h4 class="modal-title" >Edit appointment</h4>
+               <h4 class="modal-title" >new family file</h4>
                <hr>
                <div class="modal-body">
 
-                    <form action="" method="POST">
+                    <form action="{{url_for('accounts', family_id=family.id)}}" method="POST">
          
                          {{ form.hidden_tag() }}
                          {% for field in form if field.widget.input_type != 'hidden' %}
@@ -22,7 +22,7 @@
                          <span>
                          {% if field.errors %}
                           {% for error in field.errors %}
-                           {{ error  }}
+                           {{ error }}
                          {% endfor %}
                          {% endif %}
                          </span>
@@ -30,8 +30,8 @@
                          </p>
                          {% endfor %}
                     <div class="modal-footer">
-                         <button type="submit" class="btn btn-primary">upadate appointment</button>
-                         <button type="reset" class="btn btn-default" data-dismiss="modal">Close</button>
+                         <button type="submit" class="btn btn-primary" onclick="return confirmOnSubmit();">Save</button>
+                         <button type="reset" class="btn btn-default">Reset</button>
                     </div>
                       </form>
                       </div>
@@ -41,4 +41,18 @@
                </div>
 
 </div>
+
+<script type="text/javascript">
+     function confirmOnSubmit(){
+       if (confirm("Would you like to save this info")){
+         alert("You have selected OK")
+         return true;
+       }
+       else{
+         alert("You have selected cancel")
+         return false;
+       }
+     }
+   </script> 
+
 {% endblock %}

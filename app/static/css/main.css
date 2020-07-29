@@ -2,32 +2,194 @@
 STYLING FOR THE PAGES
 */
 
-.jumbotron{
+
+/*
+Navigation styling
+*/
+
+
+*{
     padding: 0;
     margin: 0;
-    background-color: whitesmoke;
+    box-sizing: border-box;
 }
- 
-.table{
-    table-layout: auto;
-    width: auto;
-    overflow-x: auto;
+.menu-bar{
+    position: sticky;
+    top: 0px;
+    background: #009879 ;
+    text-align: center;
+    height: 60px;
+}
+.menu-bar ul{
+    display: inline-flex;
+    list-style: none;
+    color: white;
+}
+.menu-bar ul li
+{
+    width: 80px;
+    margin: 10px;
+    padding: 10px;
+}
+.menu-bar ul li a
+{
+    text-decoration: none;
+    color: #dddddd;
+}
+.active, .menu-bar ul li:hover
+{
+    background: #2bab0d;
+    border-radius: 3px;
+}
+.sub-menu1
+{
+    display: none;
+
+}
+.menu-bar ul li:hover .sub-menu1
+{
+    display: block;
+    position: absolute;
+    background: rgb(0, 100, 0);
+    margin-top: 10px;
+    margin-left: -10px;
+}
+.menu-bar ul li:hover .sub-menu1 ul
+{
+    display: block;
+    margin: 10px;
+}
+.menu-bar ul li:hover .sub-menu1 ul li
+{
+    width: 150px;
+    padding: 10px;
+    border-bottom: 1px dotted #fff;
+    background: transparent;
+    border-radius: 0;
+    text-align: left;
+}
+.menu-bar ul li:hover .sub-menu1 ul li:last-child
+{
+    border-bottom: none;
+}
+.menu-bar ul li:hover .sub-menu1 ul li a:hover
+{
+    color: #b2ff00;
+}
+
+.profile img
+{
+    width: 30px;
+    float: right;
+}
+
+
+
+
+body{
+
+    font-family: sans-serif;
+}
+
+.content-table{
     border-collapse: collapse;
-    position: relative;
-    padding-top: 1px;
-    table-layout: auto;  
+    margin: 25px 10px;
+    font-size: 0.9em;
+    width: 90%;
+    border-radius: 6px 6px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px  rgba(0, 0, 0, 0.15);
+    position: absolute;
+    margin-left: 40px;
+
 }
-tr:nth-child(even){
-    background-color: rgba(82, 84, 206, 0.062);
+
+.content-table thead tr{
+    background-color:#009879 ;
+    color: #ffffff;
+    text-align: center;
+    font-weight: bold;
+    width: auto;
+    padding: 30px;
+    
+
 }
-tr:hover{
-    background-color: rgb(7, 8, 24);
-    color: white;
+
+.content-table th
+.content-table td{
+    padding: 20px 25px;
+    height: 40px;
+    
 }
-th{
-    background-color: black;
-    color: white;
+.content-table td
+{
+    height: 40px;
 }
+
+
+.content-table tbody tr{
+    border-bottom: 1px solid #dddddd;
+}
+
+.content-table tbody tr:nth-of-type(even){
+    background-color: #f3f3f3f3;
+}
+.search
+{
+    float: right;
+    position: absolute;
+    margin-left: 40px;
+}
+/*
+other small tables
+*/
+.table2{
+    border-collapse: collapse;
+    margin: 25px 10px;
+    font-size: 0.9em;
+    width: 50%;
+    border-radius: 6px 6px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px  rgba(0, 0, 0, 0.15);
+    position: absolute;
+    margin-left: 75px;
+
+}
+
+.table2 thead tr{
+    background-color:#009879 ;
+    color: #ffffff;
+    text-align: center;
+    font-weight: bold;
+    width: auto;
+    padding: 30px;
+}
+
+.table2 th
+.table2 td{
+    padding: 20px 25px;
+    height: 40px;
+    
+}
+.table td
+{
+    height: 40px;
+}
+
+
+.table2 tbody tr{
+    border-bottom: 1px solid #dddddd;
+}
+
+.table2 tbody tr:nth-of-type(even){
+    background-color: #f3f3f3f3;
+}
+
+/*.content-table tbody tr:nth-last-of-type(even){
+    border-bottom: 2px solid #009879;
+}*/
+
+
 .navbar-brand{
     color: white;
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;

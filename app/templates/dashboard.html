@@ -1,15 +1,14 @@
 {% extends 'base.html' %}
 
-
 {% block content %}
 
 <link href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet" type="text/css"/>
 
 <!--<div class="container-fluid">-->
             <!-- Content Wrapper. Contains page content -->
-            <div class="content-wrapper">
-              <div class="jumbotron">
-               <br>  
+            <br>
+            <div class="container-fluid">
+               
                  <!--Flash Messages-->
                  {% with messages = get_flashed_messages(with_categories=true) %}
                  {% if messages %}
@@ -23,15 +22,15 @@
                <!--End of flask messsages-->
 
                 <!-- Content Header (Page header) -->
-                <section class="content-header">
-                     <!--<form action="#" method="get" class="sidebar-form search-box pull-right hidden-md hidden-lg hidden-sm">
-                            <div class="input-group">
-                            <input type="text" name="q" class="form-control" placeholder="Search...">
-                                <span class="input-group-btn">
-                                    <button type="submit" name="search" id="search-btn" class="btn"><i class="fa fa-search"></i></button>
-                                </span>
-                            </div>
-                        </form>-->   
+                <!--<br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>-->
+                <br>
+                <section class="content-header">   
                     <div class="header-icon">
                         <i class="fa fa-tachometer"></i>
                     </div>
@@ -53,13 +52,13 @@
                       <div class="header">							
                       </div>
                       <div class="content">
+                        <br>
                         <h4>Welcome to Caremax </h4>
-                        <hr>
                           <img src="{{url_for('static', filename='img/t2.jpg')}}" alt="image" />
                           <br>
                           <br>
-                          <h6>Caremax is a patient records management application designed to simplify patient management and tracking.</h5>
-                          <h6>Its developed on a secure platform that only allows registered and authorized users to gain access to it after successful login.</h5>
+                          <h5>Caremax is a patient records management application designed to simplify patient management and tracking.</h5>
+                          <h5>Its developed on a secure platform that only allows registered and authorized users to gain access to it after successful login.</h5>
                       </div>
                     </div>				
                     <div class="block-flat">
@@ -67,12 +66,11 @@
                       </div>
                       <div class="content">
                         <h4>Patient side </h4>
-                        <hr>
                           <img src="{{url_for('static', filename='img/b1.jpg')}}" alt="image" />
                           <br>
                           <br>
-                          <h5>After a successful login a patient can be able to view the prescription history</h6>
-                          <h5>And make an apppointment where need araise</h6>
+                          <h5>After a successful login a patient can be able to view the prescription history</h5>
+                          <h5>And make an apppointment where need araise</h5>
                       </div>
                     </div>				
                   </div>
@@ -80,15 +78,14 @@
                   <div class="col-md-6">
                     <div class="block-flat">
                       <div class="header">							
-                    
                       </div>
                       <div class="content">
+                        <br>
                         <h4>Caremax functionalities</h4>
-                         <hr>
                           <img src="{{url_for('static', filename='img/t1.jpg')}}" alt="image"/>
                           <br>
                           <br>
-                          <h5>Caremax offers the following functionalities:</h5>
+                          <h5><b>Caremax offers the following functionalities:</b></h5>
                             <ol>
                                 <li>Registration of new Patients.</li>
                                 <li>Editing of already registered patient's bio-data</li>
@@ -117,6 +114,4 @@
                
     </body>
 </html>
-
-
 {% endblock  %}

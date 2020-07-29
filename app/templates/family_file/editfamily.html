@@ -2,12 +2,13 @@
 {% extends 'base.html' %}
 
 {% block content %}
- 
+
+<div class="content-wrapper">
 <div class="modal-dialog modal-fade" id="myModal">
       <div class="modal-content"> 
            <div class="modal-header"> 
                <button type="button" class="close" data-dismiss="modal" aria-label="close"><span aria-hidden="true">&times;</span></button>
-               <h4 class="modal-title" >Edit appointment</h4>
+               <h4 class="modal-title" >Update information</h4>
                <hr>
                <div class="modal-body">
 
@@ -30,8 +31,7 @@
                          </p>
                          {% endfor %}
                     <div class="modal-footer">
-                         <button type="submit" class="btn btn-primary">upadate appointment</button>
-                         <button type="reset" class="btn btn-default" data-dismiss="modal">Close</button>
+                         <button type="submit" class="btn btn-primary">upadate bill</button>
                     </div>
                       </form>
                       </div>
@@ -41,4 +41,5 @@
                </div>
 
 </div>
-{% endblock %}
+
+{% endblock %}-->

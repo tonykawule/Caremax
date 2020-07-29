@@ -1,112 +1,136 @@
-
 {% extends 'base.html' %}
 
 {% block content %}
 
-<link href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet" type="text/css"/>
-  
+<link href="{{url_for('static', filename='fonts/fontawesome-webfont.svg')}}" rel="stylesheet" type="text/css" />
+<link href="{{url_for('static', filename='fonts/fontawesome-webfont.otf')}}" rel="stylesheet" type="text/css" />
+<link href="{{url_for('static', filename='fonts/fontawesome-webfont.woff2')}}" rel="stylesheet" type="text/css" />
+
 <script>
-   function FilterRow(data) {
-    console.log("searching for "+data); 
+  function FilterRow(data) {
+    console.log("searching for " + data);
     var filter = data;
     var table = document.getElementById("patienttable");
-    for (i = 1; i<table.rows.length; i++)
-    {
-        var rowdata = table.rows[i].innerHTML;
-        console.log(rowdata.toUpperCase());
-         if(rowdata.toUpperCase().search(data.toUpperCase())>-1) {table.rows[i].style.display="";} 
-        else {table.rows[i].style.display="none";} 
+    for (i = 1; i < table.rows.length; i++) {
+      var rowdata = table.rows[i].innerHTML;
+      console.log(rowdata.toUpperCase());
+      if (rowdata.toUpperCase().search(data.toUpperCase()) > -1) { table.rows[i].style.display = ""; }
+      else { table.rows[i].style.display = "none"; }
     }
-    
-}
-</script> 
 
-<div class="content-wrapper">
-    <div class="jumbotron">
-        <br>
-         <!--Flash Messages-->
-         {% with messages = get_flashed_messages(with_categories=true) %}
-         {% if messages %}
-         {% for category, message in messages %}
-         <div class="alert alert-{{category}}">
-         {{message}}
-         </div>
-         {% endfor %}
-         {% endif %}
-         {% endwith %}
-         <!--End flash message-->
- <br>
-<table style="float: right;">
-    <tr>
-     <td><input class="form-control" style="min-width:40%" type="text" onkeydown="FilterRow(this.value)" placeholder="Search for a patient"/></td>
-     </tr>
-</table>
-    <br>
-    <h4 style="text-align: center;"><strong>Registered patient list</strong></h4>
-    <table id="patienttable" class="table">
-     <thead>
-         <tr>
-                 <th>Registration number<b></b></th>
-                 <th>Health care unit<b></b></th>
-                 <th>Patient name<b></b></th>
-                 <th>Gender<b></b></th>
-                 <th>Date of birth<b></b></th>
-                 <th>Address<b></b></th>
-                 <th>contact<b></b></th>
-                 <th>Next of kin<b></b></th>
-                 <th>Contact phone<b></b></th>
-                 <th>Religion<b></b></th>
-                 <th>Tribe<b></b></th>
-                 <th>Profession<b></b></th>
-                 <th>Bloodgroup<b></b></th>
-                 <th>allergy<b></b></th>
-                 <th>Action<b></b></th>
-                     
-         </tr>
-     </thead>
-     {% for patient in patients %}
-     <tr>
-         <td>{{patient.registrationnumber}}</td>
-         <td>{{patient.healthcareunit}}</td>
-         <td>{{patient.patientname}}</td>
-         <td>{{patient.gender}}</td>
-         <td>{{patient.dob}}</td>
-         <td>{{patient.address}}</td>
-         <td>{{patient.contact}}</td>
-         <td>{{patient.nextofkin}}</td>
-         <td>{{patient.contactphone}}</td>
-         <td>{{patient.religion}}</td>
-         <td>{{patient.tribe}}</td>
-         <td>{{patient.profession}}</td>
-         <td>{{patient.bloodgroup}}</td>
-         <td>{{patient.allergy}}</td>
-         <td>
-         <a class="btn btn-success btn-xs" href="{{url_for('editpatient', id=patient.id)}}"><span class="glyphicon glyphicon-pencil"></span></a>
-         <a class="btn btn-danger btn-xs" href="{{url_for('deletepatient', id=patient.id)}}" onclick="return confirmOnDelete();"><span class="glyphicon glyphicon-minus"></span></a>
-         <a class="btn btn-success btn-xs" href="{{url_for('patient_visitation', patient_id=patient.id)}}">visit</a>
-         
-         </td>
-     </tr>
-<script>
-    $('.patienttable').Datatable();
+  }
 </script>
-     {% endfor %}
-     
-    </table>
-     </div>
-    </div>
-  
-<script type="text/javascript">
-    function confirmOnDelete(){
-      if (confirm("Are you sure you to delete this Patient")){
-        alert("You have selected OK")
-        return true;
-      }
-      else{
-        alert("You have selected cancel")
-        return false;
-      }
-    }
+<br>
+<!--Flash Messages-->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{category}}">
+  {{message}}
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<!--End flash message-->
+<br>
+<table class="search">
+  <tr>
+    <td><input class="form-control" style="min-width:40%" type="text" onkeydown="FilterRow(this.value)"
+        placeholder="Search for a patient" /></td>
+  </tr>
+</table>
+<br>
+<table id="patienttable" class="content-table">
+  <thead>
+    <tr>
+      <th>RegNumber<b></b></th>
+      <th>Health care unit<b></b></th>
+      <th>Patient name<b></b></th>
+      <th>Gender<b></b></th>
+      <th>Date of birth<b></b></th>
+      <th>Address<b></b></th>
+      <th>contact<b></b></th>
+      <th>Next of kin<b></b></th>
+      <th>Contact phone<b></b></th>
+      <th>Religion<b></b></th>
+      <th>Tribe<b></b></th>
+      <th>Profession<b></b></th>
+      <th>Bloodgroup<b></b></th>
+      <th>allergy<b></b></th>
+      <th>Action<b></b></th>
 
-  </script> 
+    </tr>
+  </thead>
+  {% for patient in patients %}
+  <tr>
+    <td>{{patient.registrationnumber}}</td>
+    <td>{{patient.healthcareunit}}</td>
+    <td>{{patient.patientname}}</td>
+    <td>{{patient.gender}}</td>
+    <td>{{patient.dob}}</td>
+    <td>{{patient.address}}</td>
+    <td>{{patient.contact}}</td>
+    <td>{{patient.nextofkin}}</td>
+    <td>{{patient.contactphone}}</td>
+    <td>{{patient.religion}}</td>
+    <td>{{patient.tribe}}</td>
+    <td>{{patient.profession}}</td>
+    <td>{{patient.bloodgroup}}</td>
+    <td>{{patient.allergy}}</td>
+    <td>
+      {% if current_user.access =='admin' %}
+      <a href="{{url_for('editpatient', id=patient.id)}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+      <a class="btn btn-danger btn-xs" href="{{url_for('deletepatient', id=patient.id)}}"
+        onclick="return confirmOnDelete();"><i class="fa fa-trash" aria-hidden="true"></i></a>
+      <a class="btn btn-info btn-xs" href="{{url_for('patient_visitation', patient_id=patient.id)}}"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></a>
+      {% endif %}
+
+      {% if current_user.access =='doctor' %}
+      <a class="btn btn-success btn-xs" href="{{url_for('editpatient', id=patient.id)}}">update</a>
+      <a class="btn btn-danger btn-xs" href="{{url_for('deletepatient', id=patient.id)}}"
+        onclick="return confirmOnDelete();">drop</a>
+      <a class="btn btn-info btn-xs" href="{{url_for('patient_visitation', patient_id=patient.id)}}">visit</a>
+      {% endif %}
+
+      {% if current_user.access =='nurse' %}
+      <a class="btn btn-success btn-xs" href="{{url_for('editpatient', id=patient.id)}}">update</a>
+      <a class="btn btn-danger btn-xs" href="{{url_for('deletepatient', id=patient.id)}}"
+        onclick="return confirmOnDelete();">drop</a>
+      <a class="btn btn-info btn-xs" href="{{url_for('patient_payment', patient_id=patient.id)}}">payments</a>
+      {% endif %}
+
+      {% if current_user.access =='laboratory' %}
+      <!--<a class="btn btn-success btn-xs" href="{{url_for('editpatient', id=patient.id)}}">update</a>
+           <a class="btn btn-danger btn-xs" href="{{url_for('deletepatient', id=patient.id)}}" onclick="return confirmOnDelete();">drop</a>-->
+      <a class="btn btn-info btn-xs" href="{{url_for('patient_test', patient_id=patient.id)}}">visit</a>
+      {% endif %}
+
+    </td>
+  </tr>
+  <script>
+    $('.patienttable').Datatable();
+  </script>
+  {% endfor %}
+
+</table>
+</div>
+</div>
+<script type="text/javascript">
+  function confirmOnDelete() {
+    if (confirm("Are you sure you to delete this Patient")) {
+      alert("You have selected OK")
+      return true;
+    }
+    else {
+      alert("You have selected cancel")
+      return false;
+    }
+  }
+
+</script>
 {% endblock %}
+
+
+<i class="fa fa-plus" aria-hidden="true"></i>
+
+<i class="fa fa-ellipsis-h" aria-hidden="true"></i>

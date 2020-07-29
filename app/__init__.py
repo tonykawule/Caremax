@@ -12,7 +12,7 @@ from flask_admin.contrib.sqla import ModelView
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/caremax'
-app.config['SQLALCHEMY_TRACK_MIDIFICATION'] = False
+app.config['SQLALCHEMY_TRACK_MIDIFICATION'] = True
 app.config['SECRET_KEY'] = 'thisismysecretkey'
 
 db = SQLAlchemy(app)
