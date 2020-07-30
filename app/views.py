@@ -221,8 +221,6 @@ def editpatient(id):
     return render_template('patients/editpatient.html', form=form)
 
 # delete patient
-
-
 @app.route("/patient/<int:id>/deletepatient")
 @login_required
 def deletepatient(id):
@@ -307,7 +305,6 @@ def patient_test(patient_id):
 
 # New Test
 
-
 @app.route('/patient/<int:patient_id>/test', methods=["GET", "POST"])
 @login_required
 def newtest(patient_id):
@@ -315,7 +312,6 @@ def newtest(patient_id):
     return render_template('tests/newtest.html', form=form, patient=Patient.query.get(patient_id))
 
 # Edit a patient Test
-
 
 @app.route('/patient/<int:patient_id>/visitation/<int:id>/editvisitation', methods=["GET", "POST"])
 def edittest(patient_id, id):
@@ -343,7 +339,6 @@ def edittest(patient_id, id):
 @app.route('/patients/<int:patient_id>/treatments', methods=["GET", "POST"])
 @login_required
 def patient_treatment(patient_id):
-
     # find a patient
     if request.method == 'POST':
         form = TreatmentForm(request.form)
@@ -360,7 +355,6 @@ def patient_treatment(patient_id):
 
 # New Test
 
-
 @app.route('/patient/<int:patient_id>/treatment', methods=["GET", "POST"])
 @login_required
 def newtreatment(patient_id):
@@ -368,7 +362,6 @@ def newtreatment(patient_id):
     return render_template('treatments/newtreatment.html', form=form, patient=Patient.query.get(patient_id))
 
 # Edit a patient Treatment
-
 
 @app.route('/patient/<int:patient_id>/treatments/<int:id>/edittreatment', methods=["GET", "POST"])
 @login_required
@@ -677,8 +670,7 @@ def schedule():
                     form.work_schedule.data)
                 db.session.add(new_schedule)
                 db.session.commit()
-                flash(
-                    f'account has been successfully created!', 'success')
+                flash(f'Schedule has been successfully created!', 'success')
                 return redirect(url_for('schedule'))
             except IntegrityError:
                 db.session.rollback()
@@ -710,10 +702,14 @@ def editschedule(id):
             return render_template("schedule/editschedule.html", form=form)
     return render_template('schedule/editschedule.html', form=form)
 
-
-
-
-
+@app.route("/schedule/<int:id>/deleteschedule")
+@login_required
+def deleteschedule(id):
+    schedule = Schedule.query.get(id)
+    db.session.delete(schedule)
+    db.session.commit()
+    flash(f'Schedule deleted successfully!!', 'danger')
+    return redirect(url_for('schedule'))
 
 # ERROR HANDLER FUNCTION
 @app.errorhandler(403)

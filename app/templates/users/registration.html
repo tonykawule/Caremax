@@ -17,7 +17,7 @@
 
   }
 </script>
-
+<div class="container">
     <br>
     <!--Flash Messages-->
     {% with messages = get_flashed_messages(with_categories=true) %}
@@ -33,8 +33,7 @@
     <br>
     <table class="search">
       <tr>
-        <td><input class="form-control" style="min-width:40%; padding-bottom: 30px;" type="text" onkeydown="FilterRow(this.value)"
-            placeholder="Search for a User" /></td>
+        <td><input class="form-control" style="min-width:40%;" type="text" onkeydown="FilterRow(this.value)" placeholder="Search for a User"  /></td>
       </tr>
     </table>
     <br>
@@ -58,15 +57,15 @@
         <td>{{user.access}}</td>
         <td>
           <a class="btn btn-danger btn-xs" href="{{url_for('deleteuser', id=user.id)}}"
-            onclick="return confirmOnDelete()"><span class="glyphicon glyphicon-remove-sign"></span></a>
-          <a class="btn btn-success btn-xs" href=""><span class="glyphicon glyphicon-minus-sign"></span></a>
+            onclick="return confirmOnDelete()"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+          <a class="btn btn-success btn-xs" href=""><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
         </td>
       </tr>
-    
       {% endfor %}
 
     </table>
   </div>
+</div>
 <script type="text/javascript">
   function confirmOnDelete() {
     if (confirm("Are you sure you want to delete this User")) {

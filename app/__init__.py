@@ -6,8 +6,7 @@ from flask_login import LoginManager
 #from flask_session import Session
 import os
 from sqlalchemy.exc import IntegrityError
-from flask_admin import Admin
-from flask_admin.contrib.sqla import ModelView
+
 
 app = Flask(__name__)
 

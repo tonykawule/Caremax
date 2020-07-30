@@ -41,16 +41,18 @@
 <body>
 
   <div class="header">
-    <div class="menu-bar">
+    <div class="menu-bar" id="menu">
       <div>
-        <a class="navbar-brand" href="#">Caremax</a>
+      </div>
+      <div class="activeuser">
+        <p>Hello, {{ current_user.username }} <img src="{{url_for('static', filename='img/t1.jpg')}}" alt="user-image" class="img-circle" height="30" width="30"></p> 
       </div>
       <ul>
-        <li class="active"><a href=""></i>Home</a></li>
+        <li class="active"><a href=""></i>Home</a><i class="fa fa-home" aria-hidden="true"></i></li>
         <li><a href="">Patient</a>
           <div class="sub-menu1">
             <ul>
-              <li><a href="{{url_for('patient')}}">patient list</a></li>
+              <li><a href="{{url_for('patient')}}">Registered Patients</a></li>
               <li><a href="{{url_for('newpatient')}}">add patient</a></li>
             </ul>
           </div>
@@ -58,9 +60,9 @@
         <li><a href="">user</a>
           <div class="sub-menu1">
             <ul>
-              <li><a href="{{url_for('registration')}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>user
+              <li><a href="{{url_for('registration')}}"><i class="fa fa-user" aria-hidden="true"></i></i>user
                   list</a></li>
-              <li><a href="{{url_for('newuser')}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>add user</a>
+              <li><a href="{{url_for('newuser')}}"><i class="fa fa-users" aria-hidden="true"></i>add user</a>
               </li>
             </ul>
           </div>
@@ -68,7 +70,7 @@
         <li><a href="">family</a>
           <div class="sub-menu1">
             <ul>
-              <li><a href="{{url_for('family')}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>family
+              <li><a href="{{url_for('family')}}"></i>family
                   list</a></li>
               <li><a href="newfamily"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>add family</a></li>
             </ul>
@@ -82,22 +84,29 @@
             </ul>
           </div>
         </li>
-        <li><a href="">pending</a></li>
+        <li><a href="{{url_for('logout')}}"><i class="fa fa-sign-out" aria-hidden="true"></i></a></li>
       </ul>
-      <div class="profile">
-        <img src="{{url_for('static', filename='img/t1.jpg')}}" class="img-circle" height="40" width="40" alt="User Image">
-
-      </div>
+      
     </div>
    
-    
     {% block content %}
 
     {% endblock %}
   </div>
+
+  <script>
+    var menu = document.getElementById('menu');
+    window.onscroll = function(){
+      if(window.pageYOffset > 100){
+        menu.style.backfaceVisibility ="#009879";
+
+      }else{
+        menu.style.background = "#009879";
+      }
+    }
+  </script>
+
 </body>
-
-
 
 <script src="{{url_for('static', filename='js/datatables.min.js')}}"></script>
 <!--<script src="{{url_for('static', filename='js/jquery-3.4.1.slim.js')}}" type="text/javascript"></script>-->

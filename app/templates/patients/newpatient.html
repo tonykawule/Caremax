@@ -3,6 +3,18 @@
 
 {% block content %}
 
+<br>
+<!--Flash Messages-->
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+{% for category, message in messages %}
+<div class="alert alert-{{category}}">
+  {{message}}
+</div>
+{% endfor %}
+{% endif %}
+{% endwith %}
+<!--End flask Messages -->
 <!--<div role="dialog" id="myModal" class="modal fade">--> 
 <div class="modal-dialog modal-fade" id="myModal">
       <div class="modal-content"> 
