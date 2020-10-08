@@ -1,15 +1,15 @@
-from app import app
-from flask import render_template, request, redirect, url_for, flash, abort
+from app import app, mail
+from flask import render_template, request, redirect, url_for, flash, session
 from .models import User, Patient, Payment, Visitation, Test, Treatment, Bill, Appointment, Healthcareunit, Family, Account, Schedule
-from app import db
+from app import db, mail
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, current_user, login_user, logout_user
 from .forms import (LoginForm, PatientForm, PaymentForm, BillForm, TreatmentForm, VisitationForm,
-                     TestForm, AppointmentForm, HealthcareunitForm, UserForm, FamilyForm, AccountForm, ScheduleForm)
+                     TestForm, AppointmentForm, HealthcareunitForm, UserForm, FamilyForm, AccountForm, ScheduleForm, RequestResetForm, ResetPasswordForm)
 from app import forms
 from sqlalchemy.exc import IntegrityError
-from functools import wraps
-
+from app.decorator import ensure_correct_user, prevent_login_signup, requires_access_level
+from flask_mail import Message
 
 @app.route("/")
 def index():
@@ -21,55 +21,15 @@ def index():
 def dashboard():
     return render_template('dashboard.html')
 
-
-@app.route("/doctor")
-def doctors():
-    return render_template('doctors.html')
-
-
-@app.route("/departments")
-def departments():
-    return render_template('departments.html')
-
-
-@app.route("/about")
-def about():
-    return render_template('about.html')
-
-
-@app.route("/elements")
-def elements():
-    return render_template('elements.html')
-
-
-@app.route("/services")
-def services():
-    return render_template('services.html')
-
-
-@app.route("/single-blog")
-def singleblog():
-    return render_template('single-blog.html')
-
-
-@app.route("/blog")
-def blog():
-    return render_template('blog.html')
-
-
-@app.route("/contact")
-def contact():
-    return render_template('contact.html')
-
-
 # USER SIGN UP
 @app.route("/registration", methods=["POST", "GET"])
 @login_required
+@requires_access_level(ACCESS['admin'])
 def registration():
     if request.method == 'GET':
         user = User.query.all()
         return render_template('users/registration.html', user=user)
-
+        
     form = UserForm(request.form)
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -78,10 +38,10 @@ def registration():
                 lastname = form.lastname.data
                 username = form.username.data
                 email = form.email.data
-                password_hash = form.password_hash.data
+                password = form.password.data
                 access = form.access.data
                 user = User(firstname=firstname, lastname=lastname, username=username, email=email,
-                            password_hash=generate_password_hash(password_hash, method='sha256'), access=access)
+                            password=generate_password_hash(password, method='sha256'), access=access)
                 db.session.add(user)
                 db.session.commit()
                 user = User.query.all()
@@ -90,25 +50,25 @@ def registration():
                 return redirect(url_for('registration'))
             except IntegrityError:
                 db.session.rollback()
-                flash(f'Username already taken, please find another username',
+                flash(f'Email address already taken, please find a unique address',
                       'alert alert-danger')
                 return render_template("users/newuser.html", form=form)
         else:
             return render_template('users/newuser.html', form=form)
     return render_template('users/newuser.html', form=form)
 
-
 @app.route("/newuser")
 @login_required
+@prevent_login_signup
+@requires_access_level(ACCESS['admin'])
 def newuser():
     form = UserForm()
     return render_template("users/newuser.html", form=form)
 
 # delete User
-
-
 @app.route("/register/<int:id>/deleteuser")
 @login_required
+@requires_access_level(ACCESS['admin'])
 def deleteuser(id):
     user = User.query.get(id)
     db.session.delete(user)
@@ -118,14 +78,17 @@ def deleteuser(id):
 
 # LOGIN BLOCK
 
-
 @app.route("/login", methods=["GET", "POST"])
+@prevent_login_signup
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+
     form = LoginForm(request.form)
     if form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).first()
+        user = User.query.filter_by(email=form.email.data).first()
         if user:
-            if check_password_hash(user.password_hash, form.password_hash.data):
+            if check_password_hash(user.password, form.password.data):
                 login_user(user, current_user)
                 flash(f'Welcome to caremax please get started', 'success')
                 return redirect(url_for('dashboard'))
@@ -133,9 +96,24 @@ def login():
             flash(
                 f'Login unsuccessful, please check your login credentials and try again', 'warning')
     return render_template('login.html', title='login', form=form)
+'''
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form.data
+        password = request.form.data
 
+        try:
+            # Check if the user is valid, this would go through a database.
+            if User.is_login_valid(email, password):
+                login_user, current_user
+                return redirect(url_for("dashboard"))  # When we redirect them, we already have data saved in the session
+        except Exception as e:
+            return render_template("404.html")  # Send user to an error page if something happened during login.
+
+    return render_template("dashboard.html")  # This template shows a login form, only called if the request.method was not 'POST'.
+ '''   
 # LOGOUT BLOCK
-
 
 @app.route('/logout')
 @login_required
@@ -151,7 +129,8 @@ def logout():
 @login_required
 def patient():
     if request.method == "GET":
-        patients = Patient.query.all()
+        page = request.args.get('page', 1, type=int)
+        patients = Patient.query.order_by(Patient.registrationnumber.desc()).paginate(page=page, per_page=14)
         return render_template("patients/patient.html", patients=patients)
 
     form = PatientForm(request.form)
@@ -185,7 +164,6 @@ def patient():
 
 # NEW PATIENNT
 
-
 @app.route("/patients/newpatient")
 @login_required
 def newpatient():
@@ -193,7 +171,6 @@ def newpatient():
     return render_template('patients/newpatient.html', form=form)
 
 # edit patient
-
 
 @app.route("/patients/<int:id>/editpatient", methods=['GET', 'POST'])
 @login_required
@@ -230,11 +207,15 @@ def deletepatient(id):
     flash(f'Patient deleted successfully!!', 'danger')
     return redirect(url_for('patient'))
 
+@app.route("/patients/<int:patient_id>/print_data")
+@login_required
+def print_data(patient_id):
+    return render_template('patients/print.html', patient=Patient.query.get(patient_id))    
+
 # end Patient
 
 # START OF VISITATION
  # see all visits for a specific patient and a new visitation
-
 
 @app.route('/patients/<int:patient_id>/visitations', methods=["GET", "POST"])
 @login_required
@@ -254,8 +235,6 @@ def patient_visitation(patient_id):
     return render_template("visitations/visitation.html", patient=Patient.query.get(patient_id))
 
 # New Visitation
-
-
 @app.route('/patient/<int:patient_id>/visitation', methods=["GET", "POST"])
 @login_required
 def newvisitation(patient_id):
@@ -263,8 +242,6 @@ def newvisitation(patient_id):
     return render_template('visitations/newvisitation.html', form=form, patient=Patient.query.get(patient_id))
 
 # Edit a patient visitation
-
-
 @app.route('/patient/<int:patient_id>/visitations/<int:id>/editvisitation', methods=["GET", "POST"])
 @login_required
 def editvisitation(patient_id, id):
@@ -280,11 +257,8 @@ def editvisitation(patient_id, id):
         return redirect(url_for('patient_visitation', patient_id=patient_id))
     return render_template("visitations/editvisitation.html", form=form, patient=Patient.query.get(patient_id))
 
-# Delete and edit a visit for a specific patient
-
 # START OF TEST
- # see all test for a specific patient and a new visitation
-
+# see all test for a specific patient and a new visitation
 
 @app.route('/patients/<int:patient_id>/tests', methods=["GET", "POST"])
 @login_required
@@ -304,7 +278,6 @@ def patient_test(patient_id):
     return render_template("tests/test.html", patient=Patient.query.get(patient_id))
 
 # New Test
-
 @app.route('/patient/<int:patient_id>/test', methods=["GET", "POST"])
 @login_required
 def newtest(patient_id):
@@ -313,7 +286,8 @@ def newtest(patient_id):
 
 # Edit a patient Test
 
-@app.route('/patient/<int:patient_id>/visitation/<int:id>/editvisitation', methods=["GET", "POST"])
+@app.route('/patient/<int:patient_id>/test/<int:id>/edittest', methods=["GET", "POST"])
+@login_required
 def edittest(patient_id, id):
     test = Test.query.get(id)
     form = TestForm(obj=test)
@@ -325,17 +299,10 @@ def edittest(patient_id, id):
         return redirect(url_for('patient_test', patient_id=patient_id))
     return render_template("tests/edittest.html", form=form, patient=Patient.query.get(patient_id))
 
-# Delete a visit for a specific patient
-# @app.route('/patient/<int:patient_id>/visitation/<int:id>/deletevisitation', methods=["GET", "POST"])
-# def patient_visitation(patient_id, id):
-#    pass
-
 # End of Test
 
 # START OF TREATMENT
- # see all test for a specific patient and a new visitation
-
-
+# see all test for a specific patient and a new treatment
 @app.route('/patients/<int:patient_id>/treatments', methods=["GET", "POST"])
 @login_required
 def patient_treatment(patient_id):
@@ -719,7 +686,62 @@ def permission_denied(e):
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("errors/404.html"), 404
-
+'''
 @app.errorhandler(500)
 def system_down(e):
     return render_template("errors/500.html"), 500
+'''  
+
+'''
+PASSWORD RESET IN CASE PASSWORD HAS BEEN FORGOTTEN
+'''
+
+def send_reset_email(user):
+    token = user.get_reset_token()
+    msg = Message('Password reset request', sender='noreply@caremax.com', recipients=[user.email])
+    msg.body = f''' To reset your password, please visit the following link:
+{url_for('reset_token', token=token, _external=True)}  
+
+No changes will take effect if you ignore this email.
+
+'''
+    mail.send(msg)
+
+@app.route('/reset_password', methods = ["GET", "POST"])
+def reset_request():
+     if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+     form = RequestResetForm()
+     if form.validate_on_submit():
+         user = User.query.filter_by(email = form.email.data).first()
+         send_reset_email(user)
+         flash(f'An email has been sent with instructions to reset your Password', 'info')
+         return redirect(url_for('login'))
+     return render_template("request_reset.html", form=form)
+
+
+@app.route('/reset_token/<token>', methods = ["GET", "POST"])
+def reset_token(token):
+     if current_user.is_authenticated:
+        return redirect(url_for('dashboard'))
+
+     user = User.verify_reset_token(token)
+
+     if user is None:
+         flash(f'That is an expired or invalid token, please make your request over again', 'warning')    
+         return redirect(url_for('reset_request'))
+     form = ResetPasswordForm()
+     if request.method == 'POST':
+        if form.validate_on_submit():
+            password = form.password.data
+                
+            user = User(password=generate_password_hash(password, method='sha256'))
+            user.password = password
+            db.session.commit()
+            flash(f'Password has been successfully updated, you can now Login please', 'success')
+            return redirect(url_for('login'))
+
+     return render_template("reset_token.html", form=form)    
+
+# Restricting Routes
+

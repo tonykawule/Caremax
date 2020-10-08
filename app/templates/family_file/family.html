@@ -56,9 +56,9 @@
         <td>{{family.location}}</td>
         <td>{{family.contact}}</td>
         <td>
-            <a class="btn btn-success btn-xs" href="{{url_for('editfamily', id=family.id)}}">update</a>
-            <a class="btn btn-danger btn-xs" href="{{url_for('deletefamily', id=family.id)}}">drop</a>
-            <a class="btn btn-info btn-xs" href="{{url_for('accounts', family_id=family.id)}}">History</a>
+            <a class="btn btn-info btn-xs" href="{{url_for('editfamily', id=family.id)}}">edit</a>
+            <a class="btn btn-danger btn-xs" href="{{url_for('deletefamily', id=family.id)}}">delete</a>
+            <a class="btn btn-warning btn-xs" href="{{url_for('accounts', family_id=family.id)}}">add detail</a>
         </td>
     </tr>
 

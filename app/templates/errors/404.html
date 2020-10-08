@@ -47,9 +47,12 @@
 </head>
 <body>
     <div class="container">
-        <div class="jumbotron">
+    <img src=" {{url_for('static', filename='img/patient.jpg')}} " class="card-img-top" alt="...">
     <h1>Oops!! Page not found </h1>
     <p>Please try another location</p>
+    <div>
+        <a class="btn btn-primary btn-sm" href="{{ url_for('patient') }}">back to patients list</a>
+    </div>
 </div>
 </div>
 </body>

@@ -38,9 +38,8 @@
         <td>{{schedule.work_schedule}}</td>
 
         <td>
-            <a href="{{url_for('editschedule', id=schedule.id)}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-            <br>
-            <a href="{{url_for('deleteschedule', id=schedule.id)}}" onclick="return confirmOnDelete()"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+            <a class="btn btn-info btn-xs" href="{{url_for('editschedule', id=schedule.id)}}">edit</a>
+            <a class="btn btn-danger btn-xs" href="{{url_for('deleteschedule', id=schedule.id)}}" onclick="return confirmOnDelete()">drop</a>
         </td>
     </tr>
 

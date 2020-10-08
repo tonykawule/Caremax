@@ -6,6 +6,8 @@ from flask_login import LoginManager
 #from flask_session import Session
 import os
 from sqlalchemy.exc import IntegrityError
+from flask_mail import Mail
+
 
 
 app = Flask(__name__)
@@ -27,19 +29,19 @@ login_manager.login_view = 'login'
 login_manager.init_app(app)
 login_manager.login_message_category = 'info'
 
+# Mail Configuration
+
+app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'tonygardner551@gmail.com'
+app.config['MAIL_PASSWORD'] = '0705033534'
+mail = Mail(app)
 
 from app import views
-from app import models
 from app import forms
+from app import models
 from .models import User
-
-#class Controller(ModelView):
-  #  def is_accessible(self):
-   #     return current_user.is_authenticated
-    #def not_auth(self):
-     #   flash(f'You are not authenticated', 'danger')    
-
-#admin.add_view(Controller(User, db.session))
 
 #Load a USER
 @login_manager.user_loader

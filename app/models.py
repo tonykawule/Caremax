@@ -1,13 +1,12 @@
 from flask_login import UserMixin
-from app import db
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from app import db, app
 from datetime import datetime
 
 ACCESS = {
-    'guest' : 1,
-    'admin' : 2,
-    'doctor' : 3,
-    'laboratory' : 4,
-    'nurse' : 5
+    'user' : 1,
+    'admin' : 2
+      
 }
 
 class User(UserMixin, db.Model):
@@ -15,18 +14,37 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(20), nullable=False)
     lastname = db.Column(db.String(20), nullable=False)
-    username = db.Column(db.String(50), nullable=False, unique=True)
-    email = db.Column(db.String(50), nullable=False, index=True)
-    password_hash = db.Column(db.String(90), nullable=False)
+    username = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(50), nullable=False, unique=True)
+    password = db.Column(db.String(90), nullable=False)
     access = db.Column(db.String(10), nullable=False)
-    
-    def __init__(self, firstname, lastname, username, email, password_hash, access):
+
+    def get_reset_token(self, expire_sec=1800):
+        s = Serializer(app.config['SECRET_KEY'], expire_sec)
+        return s.dumps({'user_id': self.id}).decode('utf-8')
+
+    @staticmethod
+    def verify_reset_token(token):
+           s = Serializer(app.config['SECRET_KEY'])
+           try:
+               user_id = s.loads(token) ['user_id']
+           except:
+               return None
+           return User.query.get(user_id)
+
+    def __init__(self, firstname, lastname, username, email, password, access=ACCESS['user']):
         self.firstname = firstname
         self.lastname = lastname
         self.username = username
         self.email = email
-        self.password_hash = password_hash
-        self.access = access    
+        self.password = password
+        self.access = access 
+
+    def is_admin(self):
+        return self.access == ACCESS['admin']  
+
+    def allowed(self, access_level):
+        return self.access >= access_level                
 
 class Patient(db.Model):
     __tablename__='patients'
@@ -82,7 +100,7 @@ class Visitation(db.Model):
         self.presentcomplaint=presentcomplaint
         self.previouscomplaint=previouscomplaint
         self.labrecommendation=labrecommendation
-        self.patient_id=patient_id
+        self.patient_id= patient_id
 
 
 class Appointment(db.Model):

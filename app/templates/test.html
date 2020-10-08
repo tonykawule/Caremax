@@ -546,3 +546,137 @@
     }
   
   </script>
+
+
+
+<form action="" method="POST">
+         
+    {{ form.hidden_tag() }}
+    {% for field in form if field.widget.input_type != 'hidden' %}
+    <p>
+    {{field.label (class="form-control-lable")}}
+    {{field (class="form-control form-control-md")}}
+    
+    <span>
+    {% if field.errors %}
+     {% for error in field.errors %}
+      {{ error  }}
+    {% endfor %}
+    {% endif %}
+    </span>
+
+    </p>
+    {% endfor %}
+<div class="modal-footer">
+    <button type="submit" class="btn btn-primary">upadate test</button>
+    <button type="reset" class="btn btn-default" data-dismiss="modal">Close</button>
+</div>
+ </form>
+
+
+
+
+ <!--<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<title>login</title>
+
+<!-- Favicon and touch icons -->
+<link href="{{url_for('static', filename='css/login.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+  <!--Flash Messages-->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  <div class="alert alert-{{category}}">
+    {{message}}
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+  <!--End of flask messsages-->
+
+  {% block content %}
+
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <!------ Include the above in your HEAD tag ---------->
+
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <!-- Include the above in your HEAD tag -->
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <div class="main">
+
+
+    <div class="container">
+      <center>
+        <div class="middle">
+          <div id="login">
+
+            <form action="{{url_for('login')}}" method="POST">
+
+              {{ form.hidden_tag() }}
+              {% for field in form if field.widget.input_type != 'hidden' %}
+              <p>
+
+                <span>
+                  {% if field.errors %}
+                  {% for error in field.errors %}
+                  <span class="text-danger"> {{ error }}</span>
+                  {% endfor %}
+                  {% endif %}
+                </span>
+
+              </p>
+              {% endfor %}
+
+              <!--<p ><span class="fa fa-user"></span>{{ form.username }}</p> 
+            <p><span class="fa fa-lock"></span>{{ form.password }} </p> -->
+
+              <div>
+                <span style="width:48%; text-align:left;  display: inline-block;"><a class="small-text" href="#">Forgot
+                    password?</a></span>
+                <span style="width:50%; text-align:right;  display: inline-block;"><input type="submit"
+                    value="Sign In"></span>
+              </div>
+
+              </fieldset>
+              <div class="clearfix"></div>
+            </form>
+
+            <div class="clearfix"></div>
+
+          </div> <!-- end login -->
+          <div class="logo">Caremax
+
+            <div class="clearfix"></div>
+          </div>
+
+        </div>
+      </center>
+    </div>
+
+  </div>
+
+  {% endblock %}
+
+  <!-- jQuery -->
+  <script src="{{url_for('static', filename='js/jquery-1.12.4.min.js')}}" type="text/javascript"></script>
+  <!-- bootstrap js -->
+  <script src="{{url_for('static', filename='js/bootstrap.min.js')}}" type="text/javascript"></script>
+</body>
+
+</html>

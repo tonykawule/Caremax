@@ -2,116 +2,105 @@
 
 {% block content %}
 
-<link href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet" type="text/css"/>
+<link href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet" type="text/css" />
+<link href="{{url_for('static', filename='css/dashboard.css')}}" rel="stylesheet" type="text/css" />
 
-<!--<div class="container-fluid">-->
-            <!-- Content Wrapper. Contains page content -->
-            <br>
-            <div class="container-fluid">
-               
-                 <!--Flash Messages-->
-                 {% with messages = get_flashed_messages(with_categories=true) %}
-                 {% if messages %}
-                 {% for category, message in messages %}
-                 <div class="alert alert-{{category}}">
-                 {{message}}
-                 </div>
-                 {% endfor %}
-                 {% endif %}
-                 {% endwith %}
-               <!--End of flask messsages-->
+<br>
+<div class="container">
 
-                <!-- Content Header (Page header) -->
-                <!--<br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>-->
-                <br>
-                <section class="content-header">   
-                    <div class="header-icon">
-                        <i class="fa fa-tachometer"></i>
-                    </div>
-                    <div class="header-title">
-                        <h1> Dashboard</h1>
-                        <small> Dashboard features</small>
-                        <ol class="breadcrumb hidden-xs">
-                            <li><a href="{{url_for('index')}}"><i class="pe-7s-home"></i> Home</a></li>
-                            <li class="active">Dashboard</li>
-                        </ol>
-                    </div>
-                </section>
-            <!-- Main content -->
+  <!--Flash Messages-->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  <div class="alert alert-{{category}}">
+    {{message}}
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+  
+  <!-- Main content -->
+  
+<body>
+<div class="col-md-4">
+  <div class="container-dashboard">
+    <div class="row justice-container-center">
+      <div class="col-md-4">
+        <div class="card shadow" style="width: 35rem;">
+          <div class="inner">
+            <img src=" {{url_for('static', filename='img/welcome.jpg')}} " class="card-img-top" alt="...">
+          </div>
+          <div class="card-body">
+            <h5 class="card-title"><b>What caremax does</b></h5>
+            <p class="card-text">Caremax is web app built on a secure platform that manages patients information.</p>
+            <p>It records a patient's visit whenever a patient visits a hospital and a visit include visitation, test, treatment and payments</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-md-4">
+  <div class="container-dashboard">
+    <div class="row justice-container-center">
+      <div class="col-md-4">
+        <div class="card shadow" style="width: 35rem;">
+          <div class="inner">
+            <img src=" {{url_for('static', filename='img/access.jpg')}} " class="card-img-top" alt="...">
+          </div>
+          <div class="card-body">
+            <h5 class="card-title"><b>Security and Usage</b></h5>
+            <p class="card-text">
+              Caremax is a secure app whereby it only allows registered users to access its functionality
+            </p>
+            <p>More so these users have previledge/rights of access</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-md-4">
+  <div class="container-dashboard">
+    <div class="row justice-container-center">
+      <div class="col-md-4">
+        <div class="card shadow" style="width: 35rem;">
+          <div class="inner">
+            <img src=" {{url_for('static', filename='img/team.jpg')}} " class="card-img-top" alt="...">
+          </div>
+          <div class="card-body">
+            <h5 class="card-title"><b>Development Team</b></h5>
+            <p class="card-text">This application is developed in a team of several developers so any change concerns awhole team.</p>
             
-            <div class="cl-mcont">		
-                <div class="row">
-                  <div class="col-md-6">
-                    <div class="block-flat">
-                      <div class="header">							
-                      </div>
-                      <div class="content">
-                        <br>
-                        <h4>Welcome to Caremax </h4>
-                          <img src="{{url_for('static', filename='img/t2.jpg')}}" alt="image" />
-                          <br>
-                          <br>
-                          <h5>Caremax is a patient records management application designed to simplify patient management and tracking.</h5>
-                          <h5>Its developed on a secure platform that only allows registered and authorized users to gain access to it after successful login.</h5>
-                      </div>
-                    </div>				
-                    <div class="block-flat">
-                      <div class="header">							
-                      </div>
-                      <div class="content">
-                        <h4>Patient side </h4>
-                          <img src="{{url_for('static', filename='img/b1.jpg')}}" alt="image" />
-                          <br>
-                          <br>
-                          <h5>After a successful login a patient can be able to view the prescription history</h5>
-                          <h5>And make an apppointment where need araise</h5>
-                      </div>
-                    </div>				
-                  </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--  End of First Row-->
+
+<div class="col-md-4">
+  <div class="container-dashboard">
+    <div class="row justice-container-center">
+      <div class="col-md-4">
+        <div class="card shadow" style="width: 30rem;">
+          <div class="inner">
+            <img src=" {{url_for('static', filename='img/patient.jpg')}} " class="card-img-top" alt="...">
+          </div>
+          <div class="card-body">
+            <h5 class="card-title"><b>Development Team</b></h5>
+            <p class="card-text">This application is developed in a team of several developers so any change concerns awhole team.</p>
             
-                  <div class="col-md-6">
-                    <div class="block-flat">
-                      <div class="header">							
-                      </div>
-                      <div class="content">
-                        <br>
-                        <h4>Caremax functionalities</h4>
-                          <img src="{{url_for('static', filename='img/t1.jpg')}}" alt="image"/>
-                          <br>
-                          <br>
-                          <h5><b>Caremax offers the following functionalities:</b></h5>
-                            <ol>
-                                <li>Registration of new Patients.</li>
-                                <li>Editing of already registered patient's bio-data</li>
-                                <li>Deleting of registered patients</li>
-                                <li>Storing, editing, deleting and displaying patients' prescription history</li>
-                                <li>Records patients visitations</li>
-                                <li>It tracks Patients bills and payment history over time</li>
-                                <li>It allows patients to schedule an appointment ahead of time</li>
-                                <li>It track all tests carriedout on a particular patient</li>
-                                <li>Caremax tracks the treatment give to a patient on a particular visit</li>
-                            </ol>                
-                      </div>
-                    </div>			
-            
-                  </div>	  
-                  
-                  </div>
-                </div>
-            
-                </div>
-                </div>
-           <!-- <footer class="main-footer">
-                <div class="pull-right hidden-xs"> <b>Version</b> 1.0</div>
-                <strong>Copyright &copy; 2016-2017 <a href="#">Caremax</a>.</strong> All rights reserved.
-            </footer>-->
-               
-    </body>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+
 </html>
+
 {% endblock  %}

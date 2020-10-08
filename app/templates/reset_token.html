@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <link href="{{url_for('static', filename='css/login.css')}}" rel="stylesheet" type="text/css" />
+  <link href="{{url_for('static', filename='css/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>caremax</title>
+</head>
+
+
+{% block content %}
+
+<body>
+
+  <!--Flash Messages-->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  {% for category, message in messages %}
+  <div class="alert alert-{{category}}">
+    {{message}}
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% endwith %}
+  <!--End flash message-->
+
+  <div class="form">
+    <p>Reset Password</p>
+    <form action="{{url_for('reset_token')}}" method="POST">
+
+      {{ form.hidden_tag() }}
+      {% for field in form if field.widget.input_type != 'hidden' %}
+      <p>
+        {{field.label (class="form-control-lable")}}
+        {{field (class="form-control form-control-md")}}
+
+        <span>
+      {% if field.errors %}
+       {% for error in field.errors %}
+       <span class="text-danger">{{ error }}</span>
+      {% endfor %}
+      {% endif %}
+      </span>
+
+      </p>
+      {% endfor %}
+
+      <button>Reset password</button>
+    </form>
+  </div>
+</body>
+
+</html>
+
+{% endblock %}
+
+<!-- jQuery -->
+<script src="{{url_for('static', filename='js/jquery-1.12.4.min.js')}}" type="text/javascript"></script>
+<!-- bootstrap js -->
+<script src="{{url_for('static', filename='js/bootstrap.min.js')}}" type="text/javascript"></script>

@@ -7,15 +7,20 @@ class UserForm(FlaskForm):
     firstname = StringField('First Name', [validators.DataRequired(), Length(min=5, max=20, message='First name must be between 5 to 20 characters')])
     lastname = StringField('Last Name', [validators.DataRequired(), Length(min=5, max=20, message='Last name must be between 5 to 20 characters')])
     username = StringField('Username', [validators.DataRequired(), Length(min=5, max=20, message='Username must be between 5 to 20 characters')])
-    email = StringField('Email', [validators.DataRequired(), Email(), Length(min=8, max=30, message='Email must be between 8 to 30 characters')])
-    password_hash = PasswordField('Password', [validators.DataRequired(), Length(min=4, max=20, message='Password must be between 4 to 20 characters')])
-    access = SelectField('Access Level', choices=[('guest', 'Patient'), ('admin', 'Admin'), ('doctor', 'Doctor'), ('laboratory', 'Laboratory'), ('nurse', 'Nurse')])
+    email = StringField('Email', [validators.DataRequired(), Email(), Length(min=5, max=50, message='Email must be between 8 to 30 characters')])
+    password = PasswordField('Password', [validators.DataRequired(), Length(min=4, max=50, message='Password must be between 4 to 20 characters')])
+    access = SelectField('Access Level', choices=[('user', 'User'), ('admin', 'Admin')])
 
 class LoginForm(FlaskForm):
-     username = StringField('Username', [validators.DataRequired(), Length(min=5, max=20, message='Username must be between 5 to 20 characters')])
-     password_hash = PasswordField('Password', [validators.DataRequired(), Length(min=4, max=20, message='Password must be between 6 to 20 characters')])
-     
+     email = StringField('Email', [validators.DataRequired(), Length(min=5, max=50, message='email must be between 5 to 50 characters')])
+     password = PasswordField('Password', [validators.DataRequired(), Length(min=4, max=50, message='Password must be between 6 to 20 characters')])
 
+class RequestResetForm(FlaskForm):
+    email = StringField('Email', [validators.DataRequired(), Email(), Length(min=5, max=50, message='Email must be between 5 to 50 characters')])
+     
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Password', [validators.DataRequired(), Length(min=4, max=50, message='Password must be between 4 to 20 characters')])
+   
 class PatientForm(FlaskForm):
     registrationnumber = StringField('Registration number', [validators.DataRequired(), Length(min=3, max=10, message='RegNo must be between 3 to 10 characters')])
     healthcareunit = StringField('Health care unit', [validators.DataRequired(), Length(min=8, max=30, message='Unit name must be between 8 to 30 characters')])

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <h4>Print out for {{ patient.patientname }} </h4>
+     <hr>
+    {% for test in patient.tests %}
+
+    <p>Test name: {{test.testname}}</p>
+    <p>Test results: {{test.testresults}}</p>
+    <hr>
+    {% endfor %}
+    
+    {% for treatment in patient.treatments %}
+
+    <p>Treament Date: {{treatment.treatment_date}}</p>
+    <p>Diagnosis: {{treatment.diagnosis}}</p>
+    <p>Treament: {{treatment.treatment}}</p>
+    <hr>
+    {% endfor %}
+
+{% endblock %}

@@ -33,12 +33,33 @@
 {% endwith %}
 <!--End flash message-->
 <br>
-<table class="search">
-  <tr>
-    <td><input class="form-control" style="min-width:40%" type="text" onkeydown="FilterRow(this.value)"
-        placeholder="Search for a patient" /><i class="fa fa-search-plus" aria-hidden="true"></i></td>
-  </tr>
-</table>
+<div>
+  <table class="search">
+    <tr>
+      <td><input class="form-control" style="float: left; min-width:40%;" type="text" onkeydown="FilterRow(this.value)"
+          placeholder="Search for a patient" /></td>
+
+    </tr>
+  </table>
+</div>
+
+<br>
+<!--Pagination-->
+<div class="pagination">
+  {% for page_num in patients.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+  {% if page_num %}
+  {% if patients.page == page_num %}
+  <a class="btn btn-info mb-4" href="{{url_for('patient', page=page_num) }}">{{ page_num }}</a>
+  {% else %}
+  <a class="btn btn-outline-info mb-4" href="{{url_for('patient', page=page_num) }}">{{ page_num }}</a>
+  {% endif %}
+  {% else %}
+  ...
+  {% endif %}
+  {% endfor %}
+</div>
+<!--End of pagination-->
+<br>
 <br>
 <table id="patienttable" class="content-table">
   <thead>
@@ -61,7 +82,7 @@
 
     </tr>
   </thead>
-  {% for patient in patients %}
+  {% for patient in patients.items %}
   <tr>
     <td>{{patient.registrationnumber}}</td>
     <td>{{patient.healthcareunit}}</td>
@@ -79,42 +100,41 @@
     <td>{{patient.allergy}}</td>
     <td>
       {% if current_user.access =='admin' %}
-      <a href="{{url_for('editpatient', id=patient.id)}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+      <a class="btn btn-info btn-xs" href="{{url_for('editpatient', id=patient.id)}}">edit</a>
       <a class="btn btn-danger btn-xs" href="{{url_for('deletepatient', id=patient.id)}}"
-        onclick="return confirmOnDelete();"><i class="fa fa-trash" aria-hidden="true"></i></a>
-      <a class="btn btn-info btn-xs" href="{{url_for('patient_visitation', patient_id=patient.id)}}"><i class="fa fa-ellipsis-h" aria-hidden="true"></i></a>
+        onclick="return confirmOnDelete();">delete</a>
+      <a class="btn btn-warning btn-xs" href="{{url_for('patient_visitation', patient_id=patient.id)}}">more</a>
       {% endif %}
 
       {% if current_user.access =='doctor' %}
-      <a class="btn btn-success btn-xs" href="{{url_for('editpatient', id=patient.id)}}">update</a>
+      <a class="btn btn-info btn-xs" href="{{url_for('editpatient', id=patient.id)}}">edit</a>
       <a class="btn btn-danger btn-xs" href="{{url_for('deletepatient', id=patient.id)}}"
-        onclick="return confirmOnDelete();">drop</a>
-      <a class="btn btn-info btn-xs" href="{{url_for('patient_visitation', patient_id=patient.id)}}">visit</a>
+        onclick="return confirmOnDelete();">delete</a>
+      <a class="btn btn-warning btn-xs" href="{{url_for('patient_visitation', patient_id=patient.id)}}">more</a>
+      <a class="btn btn-primary btn-xs" href="{{url_for('print_data', patient_id=patient.id)}}">print</a>
       {% endif %}
 
       {% if current_user.access =='nurse' %}
-      <a class="btn btn-success btn-xs" href="{{url_for('editpatient', id=patient.id)}}">update</a>
+      <a class="btn btn-info btn-xs" href="{{url_for('editpatient', id=patient.id)}}">edit</a>
       <a class="btn btn-danger btn-xs" href="{{url_for('deletepatient', id=patient.id)}}"
-        onclick="return confirmOnDelete();">drop</a>
-      <a class="btn btn-info btn-xs" href="{{url_for('patient_payment', patient_id=patient.id)}}">payments</a>
+        onclick="return confirmOnDelete();">delete</a>
+      <a class="btn btn-warning btn-xs" href="{{url_for('patient_payment', patient_id=patient.id)}}">more</a>
       {% endif %}
 
       {% if current_user.access =='laboratory' %}
       <!--<a class="btn btn-success btn-xs" href="{{url_for('editpatient', id=patient.id)}}">update</a>
            <a class="btn btn-danger btn-xs" href="{{url_for('deletepatient', id=patient.id)}}" onclick="return confirmOnDelete();">drop</a>-->
-      <a class="btn btn-info btn-xs" href="{{url_for('patient_test', patient_id=patient.id)}}">visit</a>
+      <a class="btn btn-warning btn-xs" href="{{url_for('patient_test', patient_id=patient.id)}}">more</a>
       {% endif %}
-
     </td>
   </tr>
-  <script>
-    $('.patienttable').Datatable();
-  </script>
+
   {% endfor %}
 
 </table>
 </div>
-</div>
+
+<!--Javascrip file-->
 <script type="text/javascript">
   function confirmOnDelete() {
     if (confirm("Are you sure you to delete this Patient")) {
@@ -128,9 +148,5 @@
   }
 
 </script>
+
 {% endblock %}
-
-
-<i class="fa fa-plus" aria-hidden="true"></i>
-
-<i class="fa fa-ellipsis-h" aria-hidden="true"></i>
