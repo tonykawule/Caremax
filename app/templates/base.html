@@ -19,158 +19,93 @@
 <body>
 
   <div class="header">
+
     <div class="menu-bar" id="menu">
-      <div>
-      </div>
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#micon">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+
       <div class="activeuser">
         <p>Hello, {{ current_user.username }} <img src="{{url_for('static', filename='img/t1.jpg')}}" alt="user-image"
             class="img-circle" height="30" width="30"></p>
       </div>
       {% if current_user.access == 'admin' %}
-      
-      <ul>
-        <li class="active"><a href="">Home</a></li>
-        <li><a href="">Patient</a>
-          <div class="sub-menu1">
-            <ul>
-              <li><a href="{{url_for('patient')}}">Registered Patients</a></li>
-              <li><a href="{{url_for('newpatient')}}">Add Patient</a></li>
-            </ul>
-          </div>
-        </li>
-        <li><a href="">user</a>
-          <div class="sub-menu1">
-            <ul>
-              <li><a href="{{url_for('registration')}}"><i class="fa fa-user" aria-hidden="true"></i></i>user list</a>
-              </li>
-              <li><a href="{{url_for('newuser')}}"><i class="fa fa-users" aria-hidden="true"></i>add user</a>
-              </li>
-            </ul>
-          </div>
-        </li>
-        <li><a href="">family</a>
-          <div class="sub-menu1">
-            <ul>
-              <li><a href="{{url_for('family')}}"></i>family list</a></li>
-              <li><a href="newfamily"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>add family</a></li>
-            </ul>
-          </div>
-        </li>
-        <li><a href="">schedule</a>
-          <div class="sub-menu1">
-            <ul>
-              <li><a href="{{url_for('schedule')}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>schedule
-                  list</a></li>
-              <li><a href="{{url_for('new_schedule')}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>add
-                  schedule</a></li>
-            </ul>
-          </div>
-        </li>
-        {% endif %}
 
-        {% if current_user.access == 'doctor' %}
+      <div class="collapse navbar-collapse" id="micon">
         <ul>
-          <li class="active"><a href=""></i>Home</a><i class="fa fa-home" aria-hidden="true"></i></li>
+          <li class="active"><a href="">Home</a></li>
           <li><a href="">Patient</a>
             <div class="sub-menu1">
               <ul>
-                <li><a href="{{url_for('patient')}}">Registered Patients</a></li>
-                <li><a href="{{url_for('newpatient')}}">add patient</a></li>
+                <li><a href="{{url_for('patient')}}">Patients</a></li>
+                <li><a href="{{url_for('newpatient')}}">Add Patient</a></li>
+              </ul>
+            </div>
+          </li>
+          <li><a href="">user</a>
+            <div class="sub-menu1">
+              <ul>
+                <li><a href="{{url_for('registration')}}">users</a>
+                </li>
+                <li><a href="{{url_for('newuser')}}">add user</a>
+                </li>
               </ul>
             </div>
           </li>
           <li><a href="">family</a>
             <div class="sub-menu1">
               <ul>
-                <li><a href="{{url_for('family')}}"></i>family list</a></li>
-                <li><a href="newfamily"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>add family</a></li>
+                <li><a href="{{url_for('family')}}"></i>families</a></li>
+                <li><a href="{{url_for('newfamily')}}">add family</a></li>
               </ul>
             </div>
           </li>
           <li><a href="">schedule</a>
             <div class="sub-menu1">
               <ul>
-                <li><a href="{{url_for('schedule')}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>schedule
-                    list</a></li>
-                <li><a href="{{url_for('new_schedule')}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>add
-                    schedule</a></li>
+                <li><a href="{{url_for('schedule')}}">schedules</a></li>
+                <li><a href="{{url_for('new_schedule')}}">add schedule</a></li>
               </ul>
             </div>
           </li>
-          {% else %}
-
           {% endif %}
 
-          {% if current_user.access == 'nurse' %}
+          {% if current_user.access == 'user' %}
+
           <ul>
-            <li class="active"><a href=""></i>Home</a><i class="fa fa-home" aria-hidden="true"></i></li>
+            <li class="active"><a href="">Home</a></li>
             <li><a href="">Patient</a>
               <div class="sub-menu1">
                 <ul>
-                  <li><a href="{{url_for('patient')}}">Registered Patients</a></li>
-                  <li><a href="{{url_for('newpatient')}}">add patient</a></li>
+                  <li><a href="{{url_for('patient')}}">Patients</a></li>
+                  <li><a href="{{url_for('newpatient')}}">Add Patient</a></li>
                 </ul>
               </div>
             </li>
             <li><a href="">family</a>
               <div class="sub-menu1">
                 <ul>
-                  <li><a href="{{url_for('family')}}"></i>family list</a></li>
-                  <li><a href="newfamily"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>add family</a></li>
+                  <li><a href="{{url_for('family')}}"></i>families</a></li>
+                  <li><a href="{{url_for('newfamily')}}">add family</a></li>
                 </ul>
               </div>
             </li>
             <li><a href="">schedule</a>
               <div class="sub-menu1">
                 <ul>
-                  <li><a href="{{url_for('schedule')}}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>schedule
-                      list</a></li>
+                  <li><a href="{{url_for('schedule')}}">schedules</a></li>
+                  <li><a href="{{url_for('new_schedule')}}">add schedule</a></li>
                 </ul>
               </div>
             </li>
-            {% else %}
-
             {% endif %}
+            <li><a href="{{url_for('logout')}}">Sign-out</a>
 
-            {% if current_user.access == 'laboratory' %}
-            <ul>
-              <li class="active"><a href=""></i>Home</a><i class="fa fa-home" aria-hidden="true"></i></li>
-              <li><a href="">Patient</a>
-                <div class="sub-menu1">
-                  <ul>
-                    <li><a href="{{url_for('patient')}}">Registered Patients</a></li>
-                  </ul>
-                </div>
-              </li>
-              <!--<li><a href="">family</a>
-          <div class="sub-menu1">
-            <ul>
-              <li><a href="{{url_for('family')}}"></i>family list</a></li>
-              <li><a href="newfamily"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>add family</a></li>
-            </ul>
-          </div>
-        </li>-->
-              <li><a href="">schedule</a>
-                <div class="sub-menu1">
-                  <ul>
-                    <li><a href="{{url_for('schedule')}}"><i class="fa fa-pencil-square-o"
-                          aria-hidden="true"></i>schedule list</a></li>
-                  </ul>
-                </div>
-              </li>
-              
-              {% endif %}
-
-              <li><a href="{{url_for('logout')}}">Sign-out</a>
-                <!--<div class="sub-menu1">
-            <ul>
-              <li><a href=""></i>Sign-out</a></li>
-              <li><a href="newfamily"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>add family</a></li>
-            </ul>
-          </div>-->
-              </li>
-
-            </ul>
+            </li>
+          </ul>
+      </div>
     </div>
   </div>
 
@@ -186,7 +121,7 @@
 </body>
 
 <script>
-  
+
   setTimeout(function () {
     $('.loader_bg').fadeToggle();
   }, 1500);

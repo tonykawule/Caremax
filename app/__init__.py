@@ -8,8 +8,6 @@ import os
 from sqlalchemy.exc import IntegrityError
 from flask_mail import Mail
 
-
-
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:admin@localhost/caremax'
@@ -42,6 +40,7 @@ from app import views
 from app import forms
 from app import models
 from .models import User
+
 
 #Load a USER
 @login_manager.user_loader

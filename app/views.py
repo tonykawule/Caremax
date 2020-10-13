@@ -1,15 +1,16 @@
 from app import app, mail
 from flask import render_template, request, redirect, url_for, flash, session
-from .models import User, Patient, Payment, Visitation, Test, Treatment, Bill, Appointment, Healthcareunit, Family, Account, Schedule
+from .models import User, Patient, Payment, Visitation, Test, Treatment, Bill, Appointment, Family, Account, Schedule
 from app import db, mail
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, current_user, login_user, logout_user
 from .forms import (LoginForm, PatientForm, PaymentForm, BillForm, TreatmentForm, VisitationForm,
-                     TestForm, AppointmentForm, HealthcareunitForm, UserForm, FamilyForm, AccountForm, ScheduleForm, RequestResetForm, ResetPasswordForm)
+                    TestForm, AppointmentForm, HealthcareunitForm, UserForm, FamilyForm, AccountForm, ScheduleForm, RequestResetForm, ResetPasswordForm)
 from app import forms
 from sqlalchemy.exc import IntegrityError
 from app.decorator import ensure_correct_user, prevent_login_signup, requires_access_level
 from flask_mail import Message
+
 
 @app.route("/")
 def index():
@@ -22,14 +23,16 @@ def dashboard():
     return render_template('dashboard.html')
 
 # USER SIGN UP
+
+
 @app.route("/registration", methods=["POST", "GET"])
 @login_required
-@requires_access_level(ACCESS['admin'])
+@prevent_login_signup
 def registration():
     if request.method == 'GET':
         user = User.query.all()
         return render_template('users/registration.html', user=user)
-        
+
     form = UserForm(request.form)
     if request.method == 'POST':
         if form.validate_on_submit():
@@ -57,18 +60,19 @@ def registration():
             return render_template('users/newuser.html', form=form)
     return render_template('users/newuser.html', form=form)
 
+
 @app.route("/newuser")
 @login_required
 @prevent_login_signup
-@requires_access_level(ACCESS['admin'])
 def newuser():
     form = UserForm()
     return render_template("users/newuser.html", form=form)
 
 # delete User
+
+
 @app.route("/register/<int:id>/deleteuser")
 @login_required
-@requires_access_level(ACCESS['admin'])
 def deleteuser(id):
     user = User.query.get(id)
     db.session.delete(user)
@@ -77,6 +81,7 @@ def deleteuser(id):
     return redirect(url_for('registration'))
 
 # LOGIN BLOCK
+
 
 @app.route("/login", methods=["GET", "POST"])
 @prevent_login_signup
@@ -96,24 +101,9 @@ def login():
             flash(
                 f'Login unsuccessful, please check your login credentials and try again', 'warning')
     return render_template('login.html', title='login', form=form)
-'''
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        email = request.form.data
-        password = request.form.data
 
-        try:
-            # Check if the user is valid, this would go through a database.
-            if User.is_login_valid(email, password):
-                login_user, current_user
-                return redirect(url_for("dashboard"))  # When we redirect them, we already have data saved in the session
-        except Exception as e:
-            return render_template("404.html")  # Send user to an error page if something happened during login.
-
-    return render_template("dashboard.html")  # This template shows a login form, only called if the request.method was not 'POST'.
- '''   
 # LOGOUT BLOCK
+
 
 @app.route('/logout')
 @login_required
@@ -130,7 +120,8 @@ def logout():
 def patient():
     if request.method == "GET":
         page = request.args.get('page', 1, type=int)
-        patients = Patient.query.order_by(Patient.registrationnumber.desc()).paginate(page=page, per_page=14)
+        patients = Patient.query.order_by(
+            Patient.registrationnumber.desc()).paginate(page=page, per_page=14)
         return render_template("patients/patient.html", patients=patients)
 
     form = PatientForm(request.form)
@@ -164,6 +155,7 @@ def patient():
 
 # NEW PATIENNT
 
+
 @app.route("/patients/newpatient")
 @login_required
 def newpatient():
@@ -171,6 +163,7 @@ def newpatient():
     return render_template('patients/newpatient.html', form=form)
 
 # edit patient
+
 
 @app.route("/patients/<int:id>/editpatient", methods=['GET', 'POST'])
 @login_required
@@ -198,6 +191,8 @@ def editpatient(id):
     return render_template('patients/editpatient.html', form=form)
 
 # delete patient
+
+
 @app.route("/patient/<int:id>/deletepatient")
 @login_required
 def deletepatient(id):
@@ -207,15 +202,17 @@ def deletepatient(id):
     flash(f'Patient deleted successfully!!', 'danger')
     return redirect(url_for('patient'))
 
+
 @app.route("/patients/<int:patient_id>/print_data")
 @login_required
 def print_data(patient_id):
-    return render_template('patients/print.html', patient=Patient.query.get(patient_id))    
+    return render_template('patients/print.html', patient=Patient.query.get(patient_id))
 
 # end Patient
 
 # START OF VISITATION
  # see all visits for a specific patient and a new visitation
+
 
 @app.route('/patients/<int:patient_id>/visitations', methods=["GET", "POST"])
 @login_required
@@ -235,6 +232,8 @@ def patient_visitation(patient_id):
     return render_template("visitations/visitation.html", patient=Patient.query.get(patient_id))
 
 # New Visitation
+
+
 @app.route('/patient/<int:patient_id>/visitation', methods=["GET", "POST"])
 @login_required
 def newvisitation(patient_id):
@@ -242,6 +241,8 @@ def newvisitation(patient_id):
     return render_template('visitations/newvisitation.html', form=form, patient=Patient.query.get(patient_id))
 
 # Edit a patient visitation
+
+
 @app.route('/patient/<int:patient_id>/visitations/<int:id>/editvisitation', methods=["GET", "POST"])
 @login_required
 def editvisitation(patient_id, id):
@@ -259,6 +260,7 @@ def editvisitation(patient_id, id):
 
 # START OF TEST
 # see all test for a specific patient and a new visitation
+
 
 @app.route('/patients/<int:patient_id>/tests', methods=["GET", "POST"])
 @login_required
@@ -278,6 +280,8 @@ def patient_test(patient_id):
     return render_template("tests/test.html", patient=Patient.query.get(patient_id))
 
 # New Test
+
+
 @app.route('/patient/<int:patient_id>/test', methods=["GET", "POST"])
 @login_required
 def newtest(patient_id):
@@ -285,6 +289,7 @@ def newtest(patient_id):
     return render_template('tests/newtest.html', form=form, patient=Patient.query.get(patient_id))
 
 # Edit a patient Test
+
 
 @app.route('/patient/<int:patient_id>/test/<int:id>/edittest', methods=["GET", "POST"])
 @login_required
@@ -303,6 +308,8 @@ def edittest(patient_id, id):
 
 # START OF TREATMENT
 # see all test for a specific patient and a new treatment
+
+
 @app.route('/patients/<int:patient_id>/treatments', methods=["GET", "POST"])
 @login_required
 def patient_treatment(patient_id):
@@ -322,6 +329,7 @@ def patient_treatment(patient_id):
 
 # New Test
 
+
 @app.route('/patient/<int:patient_id>/treatment', methods=["GET", "POST"])
 @login_required
 def newtreatment(patient_id):
@@ -329,6 +337,7 @@ def newtreatment(patient_id):
     return render_template('treatments/newtreatment.html', form=form, patient=Patient.query.get(patient_id))
 
 # Edit a patient Treatment
+
 
 @app.route('/patient/<int:patient_id>/treatments/<int:id>/edittreatment', methods=["GET", "POST"])
 @login_required
@@ -344,16 +353,10 @@ def edittreatment(patient_id, id):
         return redirect(url_for('patient_treatment', patient_id=patient_id))
     return render_template("treatments/edittreatment.html", form=form, patient=Patient.query.get(patient_id))
 
-
-# Delete a treatment for a specific patient
-# @app.route('/patient/<int:patient_id>/visitation/<int:id>/deletevisitation', methods=["GET", "POST"])
-# def patient_visitation(patient_id, id):
-#    pass
-
-# End of Treatment
-
 # START OF PAYMENT
  # see all payment for a specific patient and a new payment
+
+
 @app.route('/patients/<int:patient_id>/payments', methods=["GET", "POST"])
 @login_required
 def patient_payment(patient_id):
@@ -448,16 +451,6 @@ def editbill(patient_id, id):
         return redirect(url_for('patient_bill', patient_id=patient_id))
     return render_template("bills/editbill.html", form=form, patient=Patient.query.get(patient_id))
 
-# Delete a treatment for a specific patient
-# @app.route('/patient/<int:patient_id>/visitation/<int:id>/deletevisitation', methods=["GET", "POST"])
-# def patient_visitation(patient_id, id):
-#    pass
-
-# End of Treatment
-
-# START OF APPOINTMENTS
- # see all bill for a specific patient and a new payment
-
 
 @app.route('/patients/<int:patient_id>/appointments', methods=["GET", "POST"])
 @login_required
@@ -519,7 +512,7 @@ def family():
                 new_family = Family(
                     form.family_name.data,
                     form.location.data,
-                    form.contact.data)
+                    form.family_contact.data)
                 db.session.add(new_family)
                 db.session.commit()
                 flash(
@@ -550,7 +543,7 @@ def editfamily(id):
         if form.validate_on_submit():
             family.family_name = form.family_name.data
             family.location = form.location.data
-            family.contact = form.contact.data
+            family.family_contact = form.family_contact.data
             db.session.commit()
             flash(f'Family information updated successfully', 'success')
             return redirect(url_for('family'))
@@ -621,6 +614,7 @@ def editaccount(family_id, id):
         return redirect(url_for('accounts', family_id=family_id))
     return render_template("accounts/editaccount.html", form=form, family=Family.query.get(family_id))
 
+
 @app.route("/schedule", methods=["POST", "GET"])
 @login_required
 def schedule():
@@ -634,7 +628,8 @@ def schedule():
             try:
                 new_schedule = Schedule(
                     form.schedule_date.data,
-                    form.work_schedule.data)
+                    form.work_schedule.data,
+                    form.created_by.data)
                 db.session.add(new_schedule)
                 db.session.commit()
                 flash(f'Schedule has been successfully created!', 'success')
@@ -647,11 +642,13 @@ def schedule():
             return render_template("schedule/addnew.html", form=form)
     return render_template("schedule/schedule.html", schedules=schedules)
 
+
 @app.route("/addnew")
 @login_required
 def new_schedule():
     form = ScheduleForm()
     return render_template("schedule/addnew.html", form=form)
+
 
 @app.route("/schedule/<int:id>/editschedule", methods=['GET', 'POST'])
 @login_required
@@ -662,12 +659,14 @@ def editschedule(id):
         if form.validate_on_submit():
             schedule.schedule_date = form.schedule_date.data
             schedule.work_schedule = form.work_schedule.data
+            schedule.created_by = form.created_by.data
             db.session.commit()
             flash(f'Schedule information updated successfully', 'success')
             return redirect(url_for('schedule'))
         else:
             return render_template("schedule/editschedule.html", form=form)
     return render_template('schedule/editschedule.html', form=form)
+
 
 @app.route("/schedule/<int:id>/deleteschedule")
 @login_required
@@ -679,26 +678,33 @@ def deleteschedule(id):
     return redirect(url_for('schedule'))
 
 # ERROR HANDLER FUNCTION
+
+
 @app.errorhandler(403)
 def permission_denied(e):
     return render_template("errors/403.html"), 403
 
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("errors/404.html"), 404
+
+
 '''
 @app.errorhandler(500)
 def system_down(e):
     return render_template("errors/500.html"), 500
-'''  
+'''
 
 '''
 PASSWORD RESET IN CASE PASSWORD HAS BEEN FORGOTTEN
 '''
 
+
 def send_reset_email(user):
     token = user.get_reset_token()
-    msg = Message('Password reset request', sender='noreply@caremax.com', recipients=[user.email])
+    msg = Message('Password reset request',
+                  sender='noreply@caremax.com', recipients=[user.email])
     msg.body = f''' To reset your password, please visit the following link:
 {url_for('reset_token', token=token, _external=True)}  
 
@@ -707,41 +713,43 @@ No changes will take effect if you ignore this email.
 '''
     mail.send(msg)
 
-@app.route('/reset_password', methods = ["GET", "POST"])
+
+@app.route('/reset_password', methods=["GET", "POST"])
 def reset_request():
-     if current_user.is_authenticated:
+    if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
-     form = RequestResetForm()
-     if form.validate_on_submit():
-         user = User.query.filter_by(email = form.email.data).first()
-         send_reset_email(user)
-         flash(f'An email has been sent with instructions to reset your Password', 'info')
-         return redirect(url_for('login'))
-     return render_template("request_reset.html", form=form)
+    form = RequestResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        send_reset_email(user)
+        flash(f'An email has been sent with instructions to reset your Password', 'info')
+        return redirect(url_for('login'))
+    return render_template("request_reset.html", form=form)
 
 
-@app.route('/reset_token/<token>', methods = ["GET", "POST"])
+@app.route('/reset_token/<token>', methods=["GET", "POST"])
 def reset_token(token):
-     if current_user.is_authenticated:
+    if current_user.is_authenticated:
         return redirect(url_for('dashboard'))
 
-     user = User.verify_reset_token(token)
+    user = User.verify_reset_token(token)
 
-     if user is None:
-         flash(f'That is an expired or invalid token, please make your request over again', 'warning')    
-         return redirect(url_for('reset_request'))
-     form = ResetPasswordForm()
-     if request.method == 'POST':
+    if user is None:
+        flash(f'That is an expired or invalid token, please make your request over again', 'warning')
+        return redirect(url_for('reset_request'))
+    form = ResetPasswordForm()
+    if request.method == 'POST':
         if form.validate_on_submit():
             password = form.password.data
-                
-            user = User(password=generate_password_hash(password, method='sha256'))
+
+            user = User(password=generate_password_hash(
+                password, method='sha256'))
             user.password = password
             db.session.commit()
-            flash(f'Password has been successfully updated, you can now Login please', 'success')
+            flash(
+                f'Password has been successfully updated, you can now Login please', 'success')
             return redirect(url_for('login'))
 
-     return render_template("reset_token.html", form=form)    
+    return render_template("reset_token.html", form=form)
 
 # Restricting Routes
-

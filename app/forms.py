@@ -78,7 +78,7 @@ class TestForm(FlaskForm):
 class FamilyForm(FlaskForm):
     family_name = StringField('Family Name', [validators.DataRequired(), Length(min=6, max=30, message='Family name must be between 6 to 30 characters')])
     location = StringField('Location', [validators.DataRequired(), Length(min=5, max=20, message='Test results  must be between 5 to 20 characters')])
-    contact = StringField('Contact', [validators.DataRequired(), Length(min=10, max=15, message='Contact must be between 10 to 15 characters')])
+    family_contact = StringField('Family Contact', [validators.DataRequired(), Length(min=10, max=15, message='Contact must be between 10 to 15 characters')])
 
 class AccountForm(FlaskForm):
     patient_name = StringField('Patient Name', [validators.DataRequired(), Length(min=6, max=30, message='Family name must be between 6 to 30 characters')])
@@ -96,3 +96,4 @@ class HealthcareunitForm(FlaskForm):
 class ScheduleForm(FlaskForm):
     schedule_date = StringField('Schedule Date', [validators.DataRequired(), Length(min=10, max=10, message='Date must be  10 characters')])
     work_schedule = TextAreaField('Work Schedule', [validators.DataRequired(), Length(min=4, max=1000, message='Payee name must be between 4 and 60 characters')])
+    created_by = StringField('Created By', [validators.DataRequired(), Length(min=10, max=50, message='Date must be  10 characters')])

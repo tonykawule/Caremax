@@ -99,33 +99,12 @@
     <td>{{patient.bloodgroup}}</td>
     <td>{{patient.allergy}}</td>
     <td>
-      {% if current_user.access =='admin' %}
+    
       <a class="btn btn-info btn-xs" href="{{url_for('editpatient', id=patient.id)}}">edit</a>
-      <a class="btn btn-danger btn-xs" href="{{url_for('deletepatient', id=patient.id)}}"
-        onclick="return confirmOnDelete();">delete</a>
-      <a class="btn btn-warning btn-xs" href="{{url_for('patient_visitation', patient_id=patient.id)}}">more</a>
-      {% endif %}
-
-      {% if current_user.access =='doctor' %}
-      <a class="btn btn-info btn-xs" href="{{url_for('editpatient', id=patient.id)}}">edit</a>
-      <a class="btn btn-danger btn-xs" href="{{url_for('deletepatient', id=patient.id)}}"
-        onclick="return confirmOnDelete();">delete</a>
+      <a class="btn btn-danger btn-xs" href="{{url_for('deletepatient', id=patient.id)}}" onclick="return confirmOnDelete();">delete</a>
       <a class="btn btn-warning btn-xs" href="{{url_for('patient_visitation', patient_id=patient.id)}}">more</a>
       <a class="btn btn-primary btn-xs" href="{{url_for('print_data', patient_id=patient.id)}}">print</a>
-      {% endif %}
-
-      {% if current_user.access =='nurse' %}
-      <a class="btn btn-info btn-xs" href="{{url_for('editpatient', id=patient.id)}}">edit</a>
-      <a class="btn btn-danger btn-xs" href="{{url_for('deletepatient', id=patient.id)}}"
-        onclick="return confirmOnDelete();">delete</a>
-      <a class="btn btn-warning btn-xs" href="{{url_for('patient_payment', patient_id=patient.id)}}">more</a>
-      {% endif %}
-
-      {% if current_user.access =='laboratory' %}
-      <!--<a class="btn btn-success btn-xs" href="{{url_for('editpatient', id=patient.id)}}">update</a>
-           <a class="btn btn-danger btn-xs" href="{{url_for('deletepatient', id=patient.id)}}" onclick="return confirmOnDelete();">drop</a>-->
-      <a class="btn btn-warning btn-xs" href="{{url_for('patient_test', patient_id=patient.id)}}">more</a>
-      {% endif %}
+      
     </td>
   </tr>
 

@@ -19,14 +19,15 @@
   <!--End flash message-->
 
   <!--Patient navigation-->
+
   <div class="header">
     <div class="menu-bar">
       <div class="patientprofile">
         <p>Welcome to <b>{{patient.patientname}}'s account</b></p>
       </div>
       <ul>
-        {% if current_user.access == 'admin' %}
-        <li><a href="">visitation</a>
+
+        <li><a href="">Visitation</a>
           <div class="sub-menu1">
             <ul>
               <li><a href="{{url_for('newvisitation', patient_id=patient.id)}}">Add visit</a></li>
@@ -43,7 +44,7 @@
       </ul>
     </div>
     </li>
-    <li><a href="">treatment</a>
+    <li><a href="">Treatment</a>
       <div class="sub-menu1">
         <ul>
           <li><a href="{{url_for('patient_treatment', patient_id=patient.id)}}">treatment history</a></li>
@@ -51,7 +52,7 @@
         </ul>
       </div>
     </li>
-    <li><a href="">payment</a>
+    <li><a href="">Payment</a>
       <div class="sub-menu1">
         <ul>
           <li><a href="{{url_for('newpayment', patient_id=patient.id)}}">new payment</a></li>
@@ -59,7 +60,7 @@
         </ul>
       </div>
     </li>
-    <li><a href="">bill</a>
+    <li><a href="">Bill</a>
       <div class="sub-menu1">
         <ul>
           <li><a href="{{url_for('newbill', patient_id=patient.id)}}">new bill</a></li>
@@ -67,7 +68,7 @@
         </ul>
       </div>
     </li>
-    <li><a href="">appointment</a>
+    <li><a href="">Appointment</a>
       <div class="sub-menu1">
         <ul>
           <li><a href="{{url_for('newappointment', patient_id=patient.id)}}">new appointment</a></li>
@@ -76,141 +77,10 @@
         </ul>
       </div>
     </li>
-    {% else %}
-
-    {% endif %}
-
-    {% if current_user.access == 'nurse' %}
-    <li><a href="">visitation</a>
-      <div class="sub-menu1">
-        <ul>
-          <li><a href="{{url_for('newvisitation', patient_id=patient.id)}}">Add visit</a></li>
-          <li><a href="{{url_for('patient_visitation', patient_id=patient.id)}}">visit history</a></li>
-        </ul>
-      </div>
-    </li>
-    <li><a href="">treatment</a>
-      <div class="sub-menu1">
-        <ul>
-          <li><a href="{{url_for('patient_treatment', patient_id=patient.id)}}">treatment history</a></li>
-        </ul>
-      </div>
-    </li>
-    <li><a href="">payment</a>
-      <div class="sub-menu1">
-        <ul>
-          <li><a href="{{url_for('newpayment', patient_id=patient.id)}}">new payment</a></li>
-          <li><a href="{{url_for('patient_payment', patient_id=patient.id)}}">payment history</a></li>
-        </ul>
-      </div>
-    </li>
-    <li><a href="">bill</a>
-      <div class="sub-menu1">
-        <ul>
-          <li><a href="{{url_for('newbill', patient_id=patient.id)}}">test history</a></li>
-          <li><a href="{{url_for('patient_bill', patient_id=patient.id)}}">bill history</a></li>
-        </ul>
-      </div>
-    </li>
-    <li><a href="">appointment</a>
-      <div class="sub-menu1">
-        <ul>
-          <li><a href="{{url_for('patient_appointment', patient_id=patient.id)}}">appointment history</a></li>
-        </ul>
-      </div>
-    </li>
-    {% else %}
-    {% endif %}
-
-    {% if current_user.access == 'laboratory' %}
-    <li><a href="">visitation</a>
-      <div class="sub-menu1">
-        <ul>
-          <li><a href="{{url_for('patient_visitation', patient_id=patient.id)}}">visit history</a></li>
-        </ul>
-      </div>
-    </li>
-    <li><a href="">Test</a>
-      <div class="sub-menu1">
-        <ul>
-          <li><a href="{{url_for('newtest', patient_id=patient.id)}}">new test</a></li>
-          <li><a href="{{url_for('patient_test', patient_id=patient.id)}}">test history</a></li>
-    </li>
-    </ul>
   </div>
-  </li>
-
-  <li><a href="">treatment</a>
-    <div class="sub-menu1">
-      <ul>
-        <li><a href="{{url_for('patient_treatment', patient_id=patient.id)}}">treatment history</a></li>
-      </ul>
-    </div>
-  </li>
-
-  {% else %}
-  {% endif %}
-
-  {% if current_user.access == 'doctor' %}
-  <li><a href="">visitation</a>
-    <div class="sub-menu1">
-      <ul>
-        
-        <li><a href="{{url_for('patient_visitation', patient_id=patient.id)}}">visit history</a></li>
-      </ul>
-    </div>
-  </li>
-  <li><a href="">Test</a>
-    <div class="sub-menu1">
-      <ul>
-
-        <li><a href="{{url_for('patient_test', patient_id=patient.id)}}">test history</a></li>
-  </li>
-  </ul>
-</div>
-</li>
-<li><a href="">treatment</a>
-  <div class="sub-menu1">
-    <ul>
-      <li><a href="{{url_for('patient_treatment', patient_id=patient.id)}}">treatment history</a></li>
-      <li><a href="{{url_for('newtreatment', patient_id=patient.id)}}">add treament</a></li>
-    </ul>
-  </div>
-</li>
-<li><a href="">payment</a>
-  <div class="sub-menu1">
-    <ul>
-
-      <li><a href="{{url_for('patient_payment', patient_id=patient.id)}}">payment history</a></li>
-    </ul>
-  </div>
-</li>
-<li><a href="">bill</a>
-  <div class="sub-menu1">
-    <ul>
-
-      <li><a href="{{url_for('patient_bill', patient_id=patient.id)}}">bill history</a></li>
-    </ul>
-  </div>
-</li>
-<li><a href="">appointment</a>
-  <div class="sub-menu1">
-    <ul>
-
-      <li><a href="{{url_for('patient_appointment', patient_id=patient.id)}}">appointment history</a></li>
-
-    </ul>
-  </div>
-</li>
-{% else %}
-
-{% endif %}
-
-</div>
 </div>
 <!--End of Patient navigation-->
-<!--End of Patient navigation-->
-<!--End of Patient navigation-->
+
 <h4>Payment list for {{patient.patientname}}</h4>
 <table class="table2">
   <thead>
@@ -230,7 +100,7 @@
     <td>{{payment.balance}}</td>
     <td>{{payment.payeename}}</td>
     <td>{{payment.narration}}</td>
-    
+
     <td>
       <a class="btn btn-info btn-xs" href="{{url_for('editpayment', patient_id=patient.id, id=payment.id)}}">edit</a>
     </td>

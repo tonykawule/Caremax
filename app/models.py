@@ -5,8 +5,7 @@ from datetime import datetime
 
 ACCESS = {
     'user' : 1,
-    'admin' : 2
-      
+    'admin' : 2    
 }
 
 class User(UserMixin, db.Model):
@@ -137,17 +136,6 @@ class Payment(db.Model):
         self.narration=narration
         self.patient_id=patient_id
 
-class Healthcareunit(db.Model):
-    __tablename__='healthcareunits'
-    id = db.Column(db.Integer, primary_key=True)
-    healthcareunit = db.Column(db.String(50), nullable=False) 
-    address = db.Column(db.String(50), nullable=False) 
-
-    def __init__(self, healthcareunit, address):
-        self.healthcareunit=healthcareunit
-        self.address=address
-
-
 class Treatment(db.Model):
     __tablename__='treatments'
     id=db.Column(db.Integer, primary_key=True)
@@ -194,13 +182,13 @@ class Family(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     family_name = db.Column(db.String(30), unique=True, nullable=False)
     location = db.Column(db.String(50), nullable=False) 
-    contact = db.Column(db.String(15), nullable=False) 
+    family_contact = db.Column(db.String(15), nullable=False) 
     accounts = db.relationship('Account', backref='family', lazy="dynamic", cascade="all, delete")   
 
-    def __init__(self, family_name, location, contact):
+    def __init__(self, family_name, location, family_contact):
         self.family_name = family_name
         self.location = location
-        self.contact = contact
+        self.family_contact = family_contact
 
 class Account(db.Model):
     __tablename__='accounts'
@@ -229,10 +217,12 @@ class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     schedule_date = db.Column(db.String(10), nullable=False)
     work_schedule = db.Column(db.String(1000), nullable=False)
+    created_by = db.Column(db.String(50), nullable=False)
 
-    def __init__(self, schedule_date, work_schedule):
+    def __init__(self, schedule_date, work_schedule, created_by):
         self.schedule_date = schedule_date
         self.work_schedule = work_schedule
+        self.created_by = created_by
     
 
 db.create_all()

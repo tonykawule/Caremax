@@ -45,7 +45,7 @@
         <tr>
             <th>Family name</th>
             <th>Location</th>
-            <th>Contact</th>
+            <th>Family Contact</th>
             <th>Action</th>
 
         </tr>
@@ -54,7 +54,7 @@
     <tr>
         <td>{{family.family_name}}</td>
         <td>{{family.location}}</td>
-        <td>{{family.contact}}</td>
+        <td>{{family.family_contact}}</td>
         <td>
             <a class="btn btn-info btn-xs" href="{{url_for('editfamily', id=family.id)}}">edit</a>
             <a class="btn btn-danger btn-xs" href="{{url_for('deletefamily', id=family.id)}}">delete</a>
