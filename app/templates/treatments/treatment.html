@@ -68,23 +68,13 @@
         </ul>
       </div>
     </li>
-    <li><a href="">Appointment</a>
-      <div class="sub-menu1">
-        <ul>
-          <li><a href="{{url_for('newappointment', patient_id=patient.id)}}">new appointment</a></li>
-          <li><a href="{{url_for('patient_appointment', patient_id=patient.id)}}">appointment history</a></li>
-
-        </ul>
-      </div>
-    </li>
 </div>
 </div>
 <!--End of Patient navigation-->
 
-
-<h3>Treatment list for {{patient.patientname}}</h3>
-<table class="table2">
-  <thead style="align-items: center;">
+<div class="responsive-table">
+<table>
+  <thead>
     <tr>
       <th>Treatment Date</th>
       <th>Diagnosis</th>

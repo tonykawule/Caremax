@@ -66,15 +66,6 @@
         </ul>
       </div>
     </li>
-    <li><a href="">Appointment</a>
-      <div class="sub-menu1">
-        <ul>
-          <li><a href="{{url_for('newappointment', patient_id=patient.id)}}">new appointment</a></li>
-          <li><a href="{{url_for('patient_appointment', patient_id=patient.id)}}">appointment history</a></li>
-
-        </ul>
-      </div>
-    </li>
 </div>
 </div>
 <!--End of Patient navigation-->
@@ -84,7 +75,8 @@
 <br>
 <br>
 <br>
-<table class="table2">
+<div class="responsive-table">
+<table>
   <thead>
     <tr>
       <th>Visitation date</th>
@@ -108,5 +100,6 @@
 
   {% endfor %}
 </table>
+</div>
 </div>
 {% endblock %}

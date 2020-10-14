@@ -109,15 +109,74 @@ body{
     font-family: sans-serif;
 }
 
-.content-table{
+.responsive-container{
     border-collapse: collapse;
-    margin: 25px 10px;
+    margin: 0 auto;
     font-size: 0.9em;
     width: 100%;
+    padding: 15px;
     border-radius: 6px 6px 0 0;
     overflow: hidden;
     box-shadow: 0 0 20px  rgba(0, 0, 0, 0.15);
     position: absolute;
+    background: ghostwhite;
+}
+.responsive-container h4{
+    margin: 10px 0;
+    color: black;
+
+}
+.responsive-container table{
+    width: 100%;
+    margin: 5px 2.5px;
+
+}
+.responsive-container td{
+    border-color: solid 1px #ccc;
+    
+    
+}
+.responsive-container th{
+    background-color:#009879 ;
+    color: #ffffff;
+    text-align: center;
+
+}
+.responsive-container td::before{
+    display: none;
+}
+.responsive-container th, .responsive-container td{
+    display: table-cell;
+    padding: 10px;
+    text-align: center;
+
+}
+
+/* Media Query */
+
+@media(max-width: 767px){
+    .responsive-container{
+        width: 90%;
+    }
+    .responsive-container th{
+        display: none;
+    }
+    .responsive-container td{
+        display: block;
+    }
+    .responsive-container td:first-child{
+        padding-top: .5em;
+    }
+    .responsive-container td:last-child{
+        padding-bottom: .5em;
+    }
+    .responsive-container td::before{
+        content: attr(data-th) ": ";
+        font-weight: bold;
+        width: 6.5em;
+        display: inline-block;
+    }    
+
 }
 
 .content-table thead tr{
@@ -127,12 +186,10 @@ body{
     font-weight: bold;
     width: auto;
     padding: 30px;
-    
-
 }
 
-.content-table th
-.content-table td{
+.responsive-container th
+.responsive-container td{
     padding: 20px 25px;
     height: 40px;
     
@@ -143,11 +200,11 @@ body{
 }
 
 
-.content-table tbody tr{
+.responsive-container tbody tr{
     border-bottom: 1px solid #dddddd;
 }
 
-.content-table tbody tr:nth-of-type(even){
+.responsive-container tbody tr:nth-of-type(even){
     background-color: #f3f3f3f3;
 }
 .search
@@ -166,6 +223,90 @@ body{
 /*
 other small tables
 */
+
+.responsive-table{
+    border-collapse: collapse;
+    font-size: 0.9em;
+    width: 60%;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 6px 6px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px  rgba(0, 0, 0, 0.15);
+    position: absolute;
+    background: ghostwhite;
+}
+
+.responsive-table table{
+    width: 100%;
+    
+}
+.responsive-table td{
+    border-color: solid 1px #ccc;
+    
+    
+}
+.responsive-table th{
+    background-color:#009879 ;
+    color: #ffffff;
+    text-align: center;
+
+}
+.responsive-table td::before{
+    display: none;
+}
+.responsive-table th, .responsive-table td{
+    display: table-cell;
+    padding: 10px;
+    text-align: center;
+
+}
+.responsive-table tbody tr{
+    border-bottom: 1px solid #dddddd;
+}
+
+.responsive-table tbody tr:nth-of-type(even){
+    background-color: #f3f3f3f3;
+}
+
+/* Media Query */
+
+@media(max-width: 767px){
+    .responsive-table{
+        width: 60%;
+    }
+    .responsive-table th{
+        display: none;
+    }
+    .responsive-table td{
+        display: block;
+    }
+    .responsive-table td:first-child{
+        padding-top: .5em;
+    }
+    .responsive-table td:last-child{
+        padding-bottom: .5em;
+    }
+    .responsive-table td::before{
+        content: attr(data-th) ": ";
+        font-weight: bold;
+        width: 6.5em;
+        display: inline-block;
+    }    
+
+}
+
+.container-fluid{
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+.responsive-container th
+.responsive-container td{
+    padding: 20px 25px;
+    height: 40px; 
+}
+
 .table2{
     border-collapse: collapse;
     margin: 25px 10px;

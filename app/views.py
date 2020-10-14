@@ -1,11 +1,11 @@
 from app import app, mail
 from flask import render_template, request, redirect, url_for, flash, session
-from .models import User, Patient, Payment, Visitation, Test, Treatment, Bill, Appointment, Family, Account, Schedule
+from .models import User, Patient, Payment, Visitation, Test, Treatment, Bill,Family, Account, Schedule
 from app import db, mail
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_required, current_user, login_user, logout_user
 from .forms import (LoginForm, PatientForm, PaymentForm, BillForm, TreatmentForm, VisitationForm,
-                    TestForm, AppointmentForm, HealthcareunitForm, UserForm, FamilyForm, AccountForm, ScheduleForm, RequestResetForm, ResetPasswordForm)
+                    TestForm, UserForm, FamilyForm, AccountForm, ScheduleForm, RequestResetForm, ResetPasswordForm)
 from app import forms
 from sqlalchemy.exc import IntegrityError
 from app.decorator import ensure_correct_user, prevent_login_signup, requires_access_level
@@ -450,51 +450,6 @@ def editbill(patient_id, id):
         flash(f'Bill updated successfully!', 'success')
         return redirect(url_for('patient_bill', patient_id=patient_id))
     return render_template("bills/editbill.html", form=form, patient=Patient.query.get(patient_id))
-
-
-@app.route('/patients/<int:patient_id>/appointments', methods=["GET", "POST"])
-@login_required
-def patient_appointment(patient_id):
-    # find a patient
-    if request.method == 'POST':
-        form = AppointmentForm()
-        if form.validate_on_submit():
-            new_appointment = Appointment(
-                form.appointmentdate.data, form.appointmenttime.data, form.contact.data, form.message.data, patient_id)
-            db.session.add(new_appointment)
-            db.session.commit()
-            flash(f'Your appointment has been forwarded successfully', 'success')
-            return redirect(url_for('patient_appointment', patient_id=patient_id))
-        else:
-            return render_template('appointments/newappointment.html', form=form, patient_id=patient_id, patient=Patient.query.get(patient_id))
-    return render_template("appointments/appointment.html", patient=Patient.query.get(patient_id))
-
-# New Appointment
-
-
-@app.route('/patient/<int:patient_id>/appointment', methods=["GET", "POST"])
-@login_required
-def newappointment(patient_id):
-    form = AppointmentForm()
-    return render_template('appointments/newappointment.html', form=form, patient=Patient.query.get(patient_id))
-
-# Edit a patient appointment
-
-
-@app.route('/patient/<int:patient_id>/appointments/<int:id>/editappointment', methods=["GET", "POST"])
-@login_required
-def editappointment(patient_id, id):
-    appointment = Appointment.query.get(id)
-    form = AppointmentForm(obj=appointment)
-    if request.method == 'POST':
-        appointment.appointmentdate = form.appointmentdate.data
-        appointment.appointmenttime = form.appointmenttime.data
-        appointment.contact = form.contact.data
-        appointment.message = form.message.data
-        db.session.commit()
-        flash(f'Appointment updated successfully!', 'success')
-        return redirect(url_for('patient_appointment', patient_id=patient_id))
-    return render_template("appointments/editappointment.html", form=form, patient=Patient.query.get(patient_id))
 
 
 # START OF FAMILY FILES

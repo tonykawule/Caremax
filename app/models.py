@@ -63,7 +63,6 @@ class Patient(db.Model):
     bloodgroup = db.Column(db.String(4), nullable=False)
     allergy = db.Column(db.String(100), nullable=False)
     visitations = db.relationship('Visitation', backref='patient', lazy="dynamic", cascade="all, delete")
-    appointments = db.relationship('Appointment', backref='patient', lazy="dynamic", cascade="all, delete")
     payments = db.relationship('Payment', backref='patient', lazy="dynamic", cascade="all, delete")
     treatments = db.relationship('Treatment', backref='patient', lazy="dynamic", cascade="all, delete")
     bills = db.relationship('Bill', backref='patient', lazy="dynamic", cascade="all, delete")
@@ -100,23 +99,6 @@ class Visitation(db.Model):
         self.previouscomplaint=previouscomplaint
         self.labrecommendation=labrecommendation
         self.patient_id= patient_id
-
-
-class Appointment(db.Model):
-    __tablename__='appointments'
-    id = db.Column(db.Integer, primary_key=True)
-    appointmentdate = db.Column(db.String(10), nullable=False) 
-    appointmenttime = db.Column(db.String(8), nullable=False)
-    contact = db.Column(db.Integer, nullable=False)
-    message = db.Column(db.String(100), nullable=False)
-    patient_id = db.Column(db.Integer, db.ForeignKey('patients.id'))
-
-    def __init__(self, appointmentdate, appointmenttime, contact, message, patient_id ):
-        self.appointmentdate=appointmentdate
-        self.appointmenttime=appointmenttime
-        self.contact=contact
-        self.message=message
-        self.patient_id=patient_id
 
 class Payment(db.Model):
     __tablename__='payments'
